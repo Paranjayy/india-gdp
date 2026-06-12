@@ -55,15 +55,29 @@ export default function Hero({ progress }: Props) {
           willChange: "transform, opacity",
         }}
       >
-        {/* India flag tricolor strip */}
+        {/* India flag tricolor SVG */}
         <div className="flex justify-center mb-6">
-          <div className="flex flex-col w-12 h-8 rounded overflow-hidden shadow-sm">
-            <div className="flex-1 bg-india-saffron" />
-            <div className="flex-1 bg-white flex items-center justify-center">
-              <div className="w-3 h-3 rounded-full border-2 border-[--color-india-navy]" />
-            </div>
-            <div className="flex-1 bg-india-green" />
-          </div>
+          <svg className="w-12 h-8 rounded shadow-[0_1px_3px_rgba(0,0,0,0.12)] border border-neutral-200/40" viewBox="0 0 90 60" xmlns="http://www.w3.org/2000/svg">
+            <rect width="90" height="20" fill="#FF9933" />
+            <rect y="20" width="90" height="20" fill="#FFFFFF" />
+            <rect y="40" width="90" height="20" fill="#138808" />
+            <g transform="translate(45, 30)">
+              <circle r="8" fill="none" stroke="#000080" strokeWidth="0.8" />
+              <circle r="1.5" fill="#000080" />
+              {Array.from({ length: 24 }).map((_, i) => (
+                <line
+                  key={i}
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="-8"
+                  stroke="#000080"
+                  strokeWidth="0.3"
+                  transform={`rotate(${(i * 360) / 24})`}
+                />
+              ))}
+            </g>
+          </svg>
         </div>
 
         <h1 className="text-4xl sm:text-6xl md:text-7xl font-semibold tracking-tight text-ink leading-[1.05]">
