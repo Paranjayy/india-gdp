@@ -11,6 +11,7 @@ const SummarySection = dynamic(() => import("@/components/sections/SummarySectio
 const TimelineSection = dynamic(() => import("@/components/sections/TimelineSection"));
 const HistoricalChartSection = dynamic(() => import("@/components/sections/HistoricalChartSection"), { ssr: false });
 const TreemapSection = dynamic(() => import("@/components/sections/TreemapSection"));
+const SectorCompositionSection = dynamic(() => import("@/components/sections/SectorCompositionSection"), { ssr: false });
 const ComparatorsSection = dynamic(() => import("@/components/sections/ComparatorsSection"));
 const ProjectionSection = dynamic(() => import("@/components/sections/ProjectionSection"));
 const MilestonesSection = dynamic(() => import("@/components/sections/MilestonesSection"));
@@ -110,6 +111,9 @@ export default function PageClient() {
           </p>
           <FadeInOnView>
             <TreemapSection />
+          </FadeInOnView>
+          <FadeInOnView>
+            <SectorCompositionSection />
           </FadeInOnView>
         </div>
       </section>
