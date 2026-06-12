@@ -296,11 +296,14 @@ interface Props {
 const GDP_LOOKUP = new Map<string, CountryGDP>();
 WORLD_GDP.forEach(c => GDP_LOOKUP.set(c.iso3, c));
 
-export default function WorldMap({ revealProgress, highlightIso3 = "IND", defaultCenter = [78, 22] }: Props) {
+export default function WorldMap({ revealProgress, highlightIso3 = "IND", defaultCenter }: Props) {
   const [colorDim, setColorDim] = useState<ColorDimension>("nominal");
   const [selectedCountry, setSelectedCountry] = useState<CountryGDP | null>(null);
   const [tooltip, setTooltip] = useState<TooltipState>({ visible: false, x: 0, y: 0, country: null });
-  const [position, setPosition] = useState({ coordinates: defaultCenter as [number, number], zoom: 1 });
+  
+  const initialCenter = defaultCenter || (highlightIso3 === "IND" ? [20, 15] : [0, 0]);
+  const [position, setPosition] = useState({ coordinates: initialCenter as [number, number], zoom: 1 });
+
   const containerRef = useRef<HTMLDivElement>(null);
 
   const mapOpacity = Math.min(1, revealProgress * 1.8);
@@ -373,7 +376,7 @@ export default function WorldMap({ revealProgress, highlightIso3 = "IND", defaul
       {/* ── Map ── */}
       <ComposableMap
         projection="geoNaturalEarth1"
-        projectionConfig={{ scale: 185, center: [10, 10] }}
+        projectionConfig={{ scale: 135, center: [0, 0] }}
         className="w-full h-full"
         style={{ background: "var(--color-map-bg)" }}
       >

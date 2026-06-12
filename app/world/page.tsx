@@ -173,7 +173,7 @@ export default function WorldGDPPage() {
       <ThemeToggle />
 
       {/* World Map revealed as user scrolls past hero */}
-      <WorldMap revealProgress={progress} highlightIso3="NONE" defaultCenter={[15, 20]} />
+      <WorldMap revealProgress={progress} highlightIso3="NONE" defaultCenter={[0, 0]} />
 
       {/* Hero overlaid on top of map */}
       <section
