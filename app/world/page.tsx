@@ -38,6 +38,7 @@ export default function WorldGDPPage() {
 
   // Search & Filter state
   const [search, setSearch] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState<CountryGDP | null>(null);
   const [selectedRegion, setSelectedRegion] = useState<Region | "All">("All");
   const [selectedIncome, setSelectedIncome] = useState<IncomeGroup | "All">("All");
   
@@ -171,7 +172,7 @@ export default function WorldGDPPage() {
     <>
 
       {/* World Map revealed as user scrolls past hero */}
-      <WorldMap revealProgress={progress} />
+      <WorldMap revealProgress={progress} selectedCountry={selectedCountry} onSelectCountry={setSelectedCountry} />
 
       {/* Hero overlaid on top of map */}
       <section
@@ -201,7 +202,7 @@ export default function WorldGDPPage() {
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-semibold tracking-tight text-ink leading-[1.05]">
             Global economy
             <br />
-            <span className="text-blue-600 dark:text-blue-500">at a glance</span>
+            <span className="text-blue-600 ">at a glance</span>
           </h1>
           <p className="mt-5 text-[15px] md:text-[17px] text-muted max-w-md mx-auto leading-relaxed">
             Rankings, regional clusters, and growth forecasts for 240+ countries.
@@ -250,7 +251,7 @@ export default function WorldGDPPage() {
           </h2>
           <FadeInOnView>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-white dark:bg-zinc-900 border border-hairline rounded-2xl p-6">
+              <div className="bg-white border border-hairline rounded-2xl p-6">
                 <div className="text-[11px] font-medium text-muted mb-1 uppercase tracking-wider">
                   Total Nominal GDP
                 </div>
@@ -262,7 +263,7 @@ export default function WorldGDPPage() {
                 </div>
               </div>
 
-              <div className="bg-white dark:bg-zinc-900 border border-hairline rounded-2xl p-6">
+              <div className="bg-white border border-hairline rounded-2xl p-6">
                 <div className="text-[11px] font-medium text-muted mb-1 uppercase tracking-wider">
                   Total PPP GDP
                 </div>
@@ -274,7 +275,7 @@ export default function WorldGDPPage() {
                 </div>
               </div>
 
-              <div className="bg-white dark:bg-zinc-900 border border-hairline rounded-2xl p-6">
+              <div className="bg-white border border-hairline rounded-2xl p-6">
                 <div className="text-[11px] font-medium text-muted mb-1 uppercase tracking-wider">
                   World Population
                 </div>
@@ -286,11 +287,11 @@ export default function WorldGDPPage() {
                 </div>
               </div>
 
-              <div className="bg-white dark:bg-zinc-900 border border-hairline rounded-2xl p-6">
+              <div className="bg-white border border-hairline rounded-2xl p-6">
                 <div className="text-[11px] font-medium text-muted mb-1 uppercase tracking-wider">
                   Avg growth rate
                 </div>
-                <div className="text-3xl font-bold text-green-600 dark:text-green-500 tracking-tight">
+                <div className="text-3xl font-bold text-green-600 tracking-tight">
                   +{globalStats.avgGrowth.toFixed(2)}%
                 </div>
                 <div className="text-[10px] text-muted mt-1.5">
@@ -303,7 +304,7 @@ export default function WorldGDPPage() {
       </section>
 
       {/* ── 02 · Interactive Searchable Standings Table ── */}
-      <section className="relative z-10 bg-white dark:bg-zinc-900 border-t border-hairline">
+      <section className="relative z-10 bg-white border-t border-hairline">
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-muted tracking-tight mb-2">
             02 · Country comparison
@@ -348,7 +349,7 @@ export default function WorldGDPPage() {
             </div>
           </div>
 
-          <div className="overflow-x-auto border border-hairline rounded-2xl bg-white dark:bg-zinc-900">
+          <div className="overflow-x-auto border border-hairline rounded-2xl bg-white">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
                 <tr className="bg-bg border-b border-hairline text-[11px] font-medium text-muted tracking-tight">
@@ -374,8 +375,13 @@ export default function WorldGDPPage() {
               <tbody className="divide-y divide-[--color-hairline]">
                 {paginatedCountries.map((c) => {
                   const globalRank = WORLD_GDP.sort((a, b) => b.nominalGDP - a.nominalGDP).findIndex(item => item.iso3 === c.iso3) + 1;
+                  const isRowSelected = selectedCountry?.iso3 === c.iso3;
                   return (
-                    <tr key={c.iso3} className="hover:bg-bg/50 transition-colors">
+                    <tr
+                      key={c.iso3}
+                      onClick={() => setSelectedCountry(isRowSelected ? null : c)}
+                      className={`hover:bg-bg/70 transition-colors cursor-pointer ${isRowSelected ? "bg-amber-500/10 hover:bg-amber-500/15" : ""}`}
+                    >
                       <td className="py-3.5 px-4 font-medium text-muted">#{globalRank}</td>
                       <td className="py-3.5 px-4 font-medium text-ink flex items-center gap-2">
                         <span className="text-base leading-none">{c.flag}</span>
@@ -393,7 +399,7 @@ export default function WorldGDPPage() {
                       <td className="py-3.5 px-4 font-medium tabular-nums text-ink">
                         ${c.perCapita.toLocaleString()}
                       </td>
-                      <td className={`py-3.5 px-4 font-semibold tabular-nums ${c.growthRate >= 0 ? "text-green-600 dark:text-green-500" : "text-red-500"}`}>
+                      <td className={`py-3.5 px-4 font-semibold tabular-nums ${c.growthRate >= 0 ? "text-green-600" : "text-red-500"}`}>
                         {c.growthRate > 0 ? "+" : ""}{c.growthRate}%
                       </td>
                       <td className="py-3.5 px-4 tabular-nums text-muted text-right">
@@ -452,7 +458,7 @@ export default function WorldGDPPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {regionalStats.map((reg) => (
-              <div key={reg.region} className="bg-white dark:bg-zinc-900 border border-hairline rounded-2xl p-5 space-y-4">
+              <div key={reg.region} className="bg-white border border-hairline rounded-2xl p-5 space-y-4">
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="text-sm font-semibold text-ink">{reg.region}</h3>
@@ -478,7 +484,7 @@ export default function WorldGDPPage() {
                   </div>
                   <div>
                     <p className="text-[9px] text-muted uppercase">Avg Growth Rate</p>
-                    <p className="text-sm font-bold text-green-600 dark:text-green-500">+{reg.avgGrowth.toFixed(1)}%</p>
+                    <p className="text-sm font-bold text-green-600">+{reg.avgGrowth.toFixed(1)}%</p>
                   </div>
                 </div>
               </div>
@@ -488,7 +494,7 @@ export default function WorldGDPPage() {
       </section>
 
       {/* ── 04 · Leaders & Distributions ── */}
-      <section className="relative z-10 bg-white dark:bg-zinc-900 border-t border-hairline">
+      <section className="relative z-10 bg-white border-t border-hairline">
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-muted tracking-tight mb-2">
             04 · Leaders
@@ -532,7 +538,7 @@ export default function WorldGDPPage() {
                       <span>{c.flag}</span>
                       <span className="font-medium">{c.name}</span>
                     </div>
-                    <span className="font-semibold tabular-nums text-green-600 dark:text-green-500">+{c.growthRate.toFixed(1)}%</span>
+                    <span className="font-semibold tabular-nums text-green-600">+{c.growthRate.toFixed(1)}%</span>
                   </div>
                 ))}
               </div>

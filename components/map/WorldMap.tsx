@@ -286,20 +286,81 @@ interface TooltipState {
   country: CountryGDP | null;
 }
 
+const COUNTRY_COORDINATES: Record<string, [number, number]> = {
+  USA: [-95, 37],
+  CHN: [104, 35],
+  IND: [78, 22],
+  DEU: [10, 51],
+  JPN: [138, 36],
+  GBR: [-2, 55],
+  FRA: [2, 46],
+  ITA: [12, 41],
+  RUS: [105, 61],
+  BRA: [-51, -14],
+  CAN: [-106, 56],
+  KOR: [127, 35],
+  AUS: [133, -25],
+  ESP: [-3, 40],
+  MEX: [-102, 23],
+  IDN: [113, -1],
+  TUR: [35, 39],
+  SAU: [45, 23],
+  CHE: [8, 46],
+  SGP: [104, 1.3],
+  ZAF: [25, -30],
+  NGA: [8, 9],
+  PAK: [69, 30],
+  EGY: [30, 26],
+  ARG: [-63, -38],
+  SWE: [18, 60],
+  POL: [19, 52],
+  THA: [101, 15],
+  VEN: [-66, 6],
+  COL: [-73, 4],
+};
+
 interface Props {
   revealProgress: number;
+  selectedCountry?: CountryGDP | null;
+  onSelectCountry?: (country: CountryGDP | null) => void;
 }
 
 // Build a quick lookup map
 const GDP_LOOKUP = new Map<string, CountryGDP>();
 WORLD_GDP.forEach(c => GDP_LOOKUP.set(c.iso3, c));
 
-export default function WorldMap({ revealProgress }: Props) {
+export default function WorldMap({ revealProgress, selectedCountry: propSelectedCountry, onSelectCountry }: Props) {
   const [colorDim, setColorDim] = useState<ColorDimension>("nominal");
-  const [selectedCountry, setSelectedCountry] = useState<CountryGDP | null>(null);
+  const [localSelectedCountry, setLocalSelectedCountry] = useState<CountryGDP | null>(null);
+  
+  const selectedCountry = propSelectedCountry !== undefined ? propSelectedCountry : localSelectedCountry;
+  const setSelectedCountry = onSelectCountry || setLocalSelectedCountry;
+
   const [tooltip, setTooltip] = useState<TooltipState>({ visible: false, x: 0, y: 0, country: null });
-  const [position, setPosition] = useState({ coordinates: [78, 22] as [number, number], zoom: 1 });
+  const [position, setPosition] = useState({ coordinates: [78, 22] as [number, number], zoom: 2.2 });
   const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (selectedCountry) {
+      const coords = COUNTRY_COORDINATES[selectedCountry.iso3];
+      if (coords) {
+        setPosition({ coordinates: coords, zoom: 2.0 });
+      } else {
+        setPosition({ coordinates: [12, 10], zoom: 1.5 });
+      }
+    } else {
+      const progress = Math.min(1, Math.max(0, revealProgress));
+      // Pan from India [78, 22] to centered world [12, 10]
+      const targetLon = 78 - (78 - 12) * progress;
+      const targetLat = 22 - (22 - 10) * progress;
+      // Zoom out from 2.2 to 1.0
+      const targetZoom = 2.2 - (2.2 - 1.0) * progress;
+      setPosition({
+        coordinates: [targetLon, targetLat],
+        zoom: targetZoom,
+      });
+    }
+  }, [revealProgress, selectedCountry]);
 
   const mapOpacity = Math.min(1, revealProgress * 1.8);
   const panelOpen = !!selectedCountry;
@@ -332,8 +393,8 @@ export default function WorldMap({ revealProgress }: Props) {
 
   const handleClick = useCallback((iso3: string) => {
     const c = GDP_LOOKUP.get(iso3);
-    setSelectedCountry(prev => (prev?.iso3 === iso3 ? null : (c ?? null)));
-  }, []);
+    setSelectedCountry(selectedCountry?.iso3 === iso3 ? null : (c ?? null));
+  }, [selectedCountry, setSelectedCountry]);
 
   const india = GDP_LOOKUP.get("IND")!;
 
@@ -371,9 +432,9 @@ export default function WorldMap({ revealProgress }: Props) {
       {/* ── Map ── */}
       <ComposableMap
         projection="geoNaturalEarth1"
-        projectionConfig={{ scale: 185, center: [10, 10] }}
+        projectionConfig={{ scale: 145, center: [10, 10] }}
         className="w-full h-full"
-        style={{ background: "#EEF2F7" }}
+        style={{ background: "transparent" }}
       >
         <ZoomableGroup
           zoom={position.zoom}
