@@ -45,7 +45,7 @@ export default function SummarySection() {
             color: "#7C3AED",
           },
         ].map(stat => (
-          <div key={stat.label} className="bg-white rounded-2xl border border-[--color-hairline] p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+          <div key={stat.label} className="bg-[--color-card] rounded-2xl border border-[--color-hairline] p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
             <div className="text-[11px] text-[--color-muted] mb-2 tracking-tight">{stat.label}</div>
             <div className="text-2xl font-bold tracking-tight" style={{ color: stat.color }}>
               {stat.value}
@@ -103,7 +103,7 @@ export default function SummarySection() {
       </div>
 
       {/* Recovery callout */}
-      <div className="bg-[#FFF7ED] border border-[#FFE4C4] rounded-2xl p-5 flex items-start gap-4">
+      <div className="bg-orange-50/50 dark:bg-orange-950/20 border border-orange-200/50 dark:border-orange-900/30 rounded-2xl p-5 flex items-start gap-4">
         <div className="text-2xl">📈</div>
         <div>
           <div className="text-sm font-semibold text-[--color-ink] mb-1">

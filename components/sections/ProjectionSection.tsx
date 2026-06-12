@@ -52,7 +52,7 @@ export default function ProjectionSection() {
   return (
     <div className="space-y-6">
       {/* Growth rate slider */}
-      <div className="bg-white rounded-2xl border border-[--color-hairline] p-5">
+      <div className="bg-[--color-card] rounded-2xl border border-[--color-hairline] p-5">
         <div className="flex items-center justify-between mb-3">
           <label className="text-sm font-semibold text-[--color-ink]">
             India&rsquo;s annual growth rate
@@ -83,7 +83,7 @@ export default function ProjectionSection() {
         {milestones.map(m => {
           const year = hitsAt(m);
           return (
-            <div key={m} className="bg-white rounded-xl border border-[--color-hairline] p-3 text-center">
+            <div key={m} className="bg-[--color-card] rounded-xl border border-[--color-hairline] p-3 text-center">
               <div className="text-[11px] text-[--color-muted] mb-1">India hits {formatGDP(m)}</div>
               <div className="text-lg font-bold text-[--color-ink]">
                 {year ? year : ">2035"}
@@ -97,7 +97,7 @@ export default function ProjectionSection() {
       </div>
 
       {/* Line chart */}
-      <div className="bg-white rounded-2xl border border-[--color-hairline] p-4">
+      <div className="bg-[--color-card] rounded-2xl border border-[--color-hairline] p-4">
         <svg viewBox={`0 0 100 ${chartH}`} className="w-full" style={{ height: chartH }} preserveAspectRatio="none">
           {/* Milestone horizontal lines */}
           {milestones.map(m => {

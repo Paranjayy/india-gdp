@@ -15,6 +15,9 @@ const TreemapSection = dynamic(() => import("@/components/sections/TreemapSectio
 const ComparatorsSection = dynamic(() => import("@/components/sections/ComparatorsSection"));
 const ProjectionSection = dynamic(() => import("@/components/sections/ProjectionSection"));
 const MilestonesSection = dynamic(() => import("@/components/sections/MilestonesSection"));
+const RichestSection = dynamic(() => import("@/components/sections/RichestSection"));
+const StatesSection = dynamic(() => import("@/components/sections/StatesSection"));
+const RoadmapSection = dynamic(() => import("@/components/sections/RoadmapSection"));
 
 export default function PageClient() {
   const progress = useScrollProgress();
@@ -49,7 +52,7 @@ export default function PageClient() {
       {/* ── 02 · Historical timeline ── */}
       <section
         id="timeline"
-        className="relative z-10 bg-white border-t border-[--color-hairline] scroll-mt-20"
+        className="relative z-10 bg-white dark:bg-zinc-900/40 border-t border-[--color-hairline] scroll-mt-20"
       >
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
@@ -90,7 +93,7 @@ export default function PageClient() {
       {/* ── 04 · Sectoral breakdown ── */}
       <section
         id="sectors"
-        className="relative z-10 bg-white border-t border-[--color-hairline] scroll-mt-20"
+        className="relative z-10 bg-white dark:bg-zinc-900/40 border-t border-[--color-hairline] scroll-mt-20"
       >
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
@@ -132,14 +135,56 @@ export default function PageClient() {
         </div>
       </section>
 
-      {/* ── 06 · Projections ── */}
+      {/* ── 06 · Wealth concentration ── */}
       <section
-        id="projections"
-        className="relative z-10 bg-white border-t border-[--color-hairline] scroll-mt-20"
+        id="richest"
+        className="relative z-10 bg-white dark:bg-zinc-900/40 border-t border-[--color-hairline] scroll-mt-20"
       >
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
-            06 · What comes next
+            06 · Wealth concentration
+          </div>
+          <h2 className="text-3xl md:text-4xl font-semibold text-[--color-ink] tracking-tight leading-[1.1] mb-3">
+            World&rsquo;s Richest vs. Nations
+          </h2>
+          <p className="text-[15px] text-[--color-muted] leading-relaxed max-w-[42rem] mb-10">
+            How does individual and dynastic wealth compare to total national production? Elon Musk's public net worth crosses $1.1T, rivaling entire sovereign states.
+          </p>
+          <FadeInOnView>
+            <RichestSection />
+          </FadeInOnView>
+        </div>
+      </section>
+
+      {/* ── 07 · India State-Level Scale ── */}
+      <section
+        id="states"
+        className="relative z-10 bg-[--color-bg] border-t border-[--color-hairline] scroll-mt-20"
+      >
+        <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
+          <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
+            07 · India state-level scale
+          </div>
+          <h2 className="text-3xl md:text-4xl font-semibold text-[--color-ink] tracking-tight leading-[1.1] mb-3">
+            Indian States vs. Global Countries
+          </h2>
+          <p className="text-[15px] text-[--color-muted] leading-relaxed max-w-[42rem] mb-10">
+            Comparing individual Indian state GSDPs directly to global countries highlights the massive scale of India's sub-national economies.
+          </p>
+          <FadeInOnView>
+            <StatesSection />
+          </FadeInOnView>
+        </div>
+      </section>
+
+      {/* ── 08 · Projections ── */}
+      <section
+        id="projections"
+        className="relative z-10 bg-white dark:bg-zinc-900/40 border-t border-[--color-hairline] scroll-mt-20"
+      >
+        <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
+          <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
+            08 · What comes next
           </div>
           <h2 className="text-3xl md:text-4xl font-semibold text-[--color-ink] tracking-tight leading-[1.1] mb-3">
             India&rsquo;s trajectory{" "}
@@ -152,6 +197,27 @@ export default function PageClient() {
           </p>
           <FadeInOnView>
             <ProjectionSection />
+          </FadeInOnView>
+        </div>
+      </section>
+
+      {/* ── 09 · Future Roadmap ── */}
+      <section
+        id="roadmap"
+        className="relative z-10 bg-[--color-bg] border-t border-[--color-hairline] scroll-mt-20"
+      >
+        <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
+          <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
+            09 · Project roadmap
+          </div>
+          <h2 className="text-3xl md:text-4xl font-semibold text-[--color-ink] tracking-tight leading-[1.1] mb-3">
+            Future Modules & Plans
+          </h2>
+          <p className="text-[15px] text-[--color-muted] leading-relaxed max-w-[42rem] mb-10">
+            India-GDP is expanding into a comprehensive macroeconomic tracking suite. Here is our release plan for future visual modules.
+          </p>
+          <FadeInOnView>
+            <RoadmapSection />
           </FadeInOnView>
         </div>
       </section>

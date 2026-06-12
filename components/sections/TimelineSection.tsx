@@ -160,10 +160,10 @@ export default function TimelineSection() {
         className={`rounded-2xl border p-4 transition-all duration-300 min-h-[80px] ${
           milestone
             ? milestone.effect === "positive"
-              ? "bg-green-50 border-green-200"
+              ? "bg-green-50/50 dark:bg-green-950/20 border-green-200/50 dark:border-green-900/30"
               : milestone.effect === "negative"
-              ? "bg-red-50 border-red-200"
-              : "bg-blue-50 border-blue-200"
+              ? "bg-red-50/50 dark:bg-red-950/20 border-red-200/50 dark:border-red-900/30"
+              : "bg-blue-50/50 dark:bg-blue-950/20 border-blue-200/50 dark:border-blue-900/30"
             : "bg-[--color-bg] border-[--color-hairline]"
         }`}
       >
@@ -190,7 +190,7 @@ export default function TimelineSection() {
       </div>
 
       {/* TimeScrubber — forked from track-migrations */}
-      <div className="bg-white rounded-2xl border border-[--color-hairline] px-5 py-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+      <div className="bg-[--color-card] rounded-2xl border border-[--color-hairline] px-5 py-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
         {/* Top controls */}
         <div className="flex items-center gap-3 mb-3">
           <button

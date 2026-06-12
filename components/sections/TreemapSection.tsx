@@ -78,8 +78,8 @@ export default function TreemapSection() {
             onClick={() => setViewMode(mode)}
             className={`px-3 py-1.5 rounded-full text-[11px] font-medium border transition-all cursor-pointer ${
               viewMode === mode
-                ? "bg-[--color-ink] text-white border-[--color-ink]"
-                : "bg-white text-[--color-muted] border-[--color-hairline] hover:text-[--color-ink]"
+                ? "bg-[--color-ink] text-[--color-bg] border-[--color-ink]"
+                : "bg-[--color-card] text-[--color-muted] border-[--color-hairline] hover:text-[--color-ink]"
             }`}
           >
             {mode === "size" ? "By GDP Size" : "By Growth Rate"}
@@ -89,7 +89,7 @@ export default function TreemapSection() {
 
       {/* Hovered stat */}
       {hovered ? (
-        <div className="animate-fade-rise bg-white border border-[--color-hairline] rounded-xl px-4 py-3 flex items-center gap-6">
+        <div className="animate-fade-rise bg-[--color-card] border border-[--color-hairline] rounded-xl px-4 py-3 flex items-center gap-6">
           <div className="w-3 h-3 rounded-sm shrink-0" style={{ background: hovered.color }} />
           <div>
             <div className="text-sm font-semibold text-[--color-ink]">{hovered.name}</div>

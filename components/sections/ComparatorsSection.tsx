@@ -61,7 +61,7 @@ export default function ComparatorsSection() {
       </div>
 
       {/* SVG Line Chart */}
-      <div className="relative bg-white rounded-2xl border border-[--color-hairline] p-4">
+      <div className="relative bg-[--color-card] rounded-2xl border border-[--color-hairline] p-4">
         <svg
           viewBox={`0 0 100 ${height}`}
           className="w-full"
@@ -160,7 +160,7 @@ export default function ComparatorsSection() {
           const growthAdv = india.growthRate - target.growthRate;
 
           return (
-            <div key={c.key} className="bg-white rounded-xl border border-[--color-hairline] p-4">
+            <div key={c.key} className="bg-[--color-card] rounded-xl border border-[--color-hairline] p-4">
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-xl">{c.flag}</span>
                 <span className="text-sm font-semibold text-[--color-ink]">{c.name}</span>
