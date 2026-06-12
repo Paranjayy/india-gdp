@@ -52,7 +52,7 @@ export default function PageClient() {
       {/* ── 02 · Historical timeline ── */}
       <section
         id="timeline"
-        className="relative z-10 bg-white dark:bg-zinc-900/40 border-t border-hairline scroll-mt-20"
+        className="relative z-10 bg-card border-t border-hairline scroll-mt-20"
       >
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-muted tracking-tight mb-2">
@@ -93,7 +93,7 @@ export default function PageClient() {
       {/* ── 04 · Sectoral breakdown ── */}
       <section
         id="sectors"
-        className="relative z-10 bg-white dark:bg-zinc-900/40 border-t border-hairline scroll-mt-20"
+        className="relative z-10 bg-card border-t border-hairline scroll-mt-20"
       >
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-muted tracking-tight mb-2">
@@ -138,7 +138,7 @@ export default function PageClient() {
       {/* ── 06 · Wealth concentration ── */}
       <section
         id="richest"
-        className="relative z-10 bg-white dark:bg-zinc-900/40 border-t border-hairline scroll-mt-20"
+        className="relative z-10 bg-card border-t border-hairline scroll-mt-20"
       >
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-muted tracking-tight mb-2">
@@ -180,7 +180,7 @@ export default function PageClient() {
       {/* ── 08 · Projections ── */}
       <section
         id="projections"
-        className="relative z-10 bg-white dark:bg-zinc-900/40 border-t border-hairline scroll-mt-20"
+        className="relative z-10 bg-card border-t border-hairline scroll-mt-20"
       >
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-muted tracking-tight mb-2">

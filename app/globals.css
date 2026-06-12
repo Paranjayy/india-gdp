@@ -76,7 +76,7 @@ html, body {
   transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-html, body, section, footer, header, div.bg-white, div.bg-\[--color-bg\], button, select, input, textarea {
+html, body, section, footer, header, div.bg-white, div.bg-bg, div.bg-card, button, select, input, textarea {
   transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
