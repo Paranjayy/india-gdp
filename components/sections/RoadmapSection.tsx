@@ -51,6 +51,19 @@ const ROADMAP_ITEMS: RoadmapItem[] = [
       "Sector destination tracker (Services, Tech, Infrastructure, Manufacturing)",
       "Ease of Doing Business indices across states"
     ]
+  },
+  {
+    phase: "Phase 4",
+    title: "Global Country Deep Dives & Ingestion SOPs",
+    timeline: "Q2 2027",
+    status: "concept",
+    icon: "🌍",
+    description: "Transitioning the platform into a comprehensive global macroeconomic tracker. Adding dedicated deep-dive comparator hubs for major economies and standardizing automated ingestion procedures.",
+    features: [
+      "Sovereign comparison dashboards for 249 countries and territories",
+      "Sub-national comparisons (e.g., US states or German Länder vs sovereign nations)",
+      "Automated SOP data pipelines for unified ingestion of IMF WEO and World Bank API endpoints"
+    ]
   }
 ];
 

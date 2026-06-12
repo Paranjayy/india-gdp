@@ -120,48 +120,98 @@ export default function TreemapSection() {
             const isParent = node.depth === 1;
             const isHovered = hovered?.id === data.id;
 
+            if (isParent) {
+              return (
+                <g
+                  key={data.id + i}
+                  transform={`translate(${node.x0}, ${node.y0})`}
+                  className="pointer-events-none"
+                >
+                  <rect
+                    width={w}
+                    height={h}
+                    rx={8}
+                    fill={data.color}
+                    opacity={0.06}
+                    stroke={data.color}
+                    strokeWidth={1}
+                    strokeOpacity={0.15}
+                  />
+                  {w > 60 && (
+                    <text
+                      x={8}
+                      y={16}
+                      fontSize={10}
+                      fontWeight={700}
+                      fill={data.color}
+                      opacity={0.9}
+                      className="select-none font-bold uppercase tracking-wider"
+                    >
+                      {data.name} →
+                    </text>
+                  )}
+                </g>
+              );
+            }
+
+            const clipId = `clip-sector-${data.id}`;
+            const padding = 2; // gap between nodes to make them hover like floating cards
+            const cardW = w - padding * 2;
+            const cardH = h - padding * 2;
+
+            if (cardW < 2 || cardH < 2) return null;
+
             return (
               <g
                 key={data.id + i}
-                transform={`translate(${node.x0}, ${node.y0})`}
+                transform={`translate(${node.x0 + padding}, ${node.y0 + padding})`}
                 onMouseEnter={() => setHovered(data)}
                 onMouseLeave={() => setHovered(null)}
                 className="cursor-pointer"
               >
+                <defs>
+                  <clipPath id={clipId}>
+                    <rect width={cardW} height={cardH} rx={6} />
+                  </clipPath>
+                </defs>
                 <rect
-                  width={w}
-                  height={h}
-                  rx={4}
+                  width={cardW}
+                  height={cardH}
+                  rx={6}
                   fill={data.color}
-                  opacity={isParent ? 0.15 : isHovered ? 0.95 : 0.8}
-                  stroke={isHovered ? "#1D1D1F" : "white"}
-                  strokeWidth={isHovered ? 1.5 : 0.5}
-                  style={{ transition: "opacity 0.15s" }}
+                  opacity={isHovered ? 0.95 : 0.85}
+                  stroke={isHovered ? "#1D1D1F" : "rgba(255,255,255,0.7)"}
+                  strokeWidth={isHovered ? 1.5 : 0.75}
+                  style={{
+                    transition: "opacity 150ms, stroke 150ms, filter 150ms",
+                    filter: isHovered
+                      ? "drop-shadow(0 4px 6px rgba(0,0,0,0.1))"
+                      : "drop-shadow(0 1px 2px rgba(0,0,0,0.03))"
+                  }}
                 />
-                {isParent && w > 60 && (
-                  <text
-                    x={4}
-                    y={15}
-                    fontSize={10}
-                    fontWeight={600}
-                    fill={data.color}
-                    className="pointer-events-none select-none"
-                  >
-                    {data.name.toUpperCase()}
-                  </text>
-                )}
-                {!isParent && w > 40 && h > 30 && (
-                  <>
-                    <text x={5} y={14} fontSize={9} fontWeight={600} fill="white" className="pointer-events-none select-none">
-                      {data.name.length > Math.floor(w / 6) ? data.name.slice(0, Math.floor(w / 6)) + "…" : data.name}
+                <g clipPath={`url(#${clipId})`} className="pointer-events-none select-none">
+                  {cardW > 35 && cardH > 18 && (
+                    <text
+                      x={6}
+                      y={14}
+                      fontSize={10}
+                      fontWeight={600}
+                      fill="white"
+                    >
+                      {data.name}
                     </text>
-                    {h > 30 && (
-                      <text x={5} y={26} fontSize={8} fill="rgba(255,255,255,0.8)" className="pointer-events-none select-none">
-                        ${data.gdpBillion.toFixed(0)}B
-                      </text>
-                    )}
-                  </>
-                )}
+                  )}
+                  {cardW > 50 && cardH > 32 && (
+                    <text
+                      x={6}
+                      y={26}
+                      fontSize={8.5}
+                      fill="rgba(255,255,255,0.8)"
+                    >
+                      {viewMode === "size" ? `$${data.gdpBillion.toFixed(0)}B` : `+${data.growthRate}%`}
+                    </text>
+                  )}
+                </g>
               </g>
             );
           })}
