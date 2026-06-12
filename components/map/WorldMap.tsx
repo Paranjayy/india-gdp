@@ -413,7 +413,7 @@ export default function WorldMap({ revealProgress, selectedCountry: propSelected
       onMouseMove={handleMouseMove}
     >
       {/* ── Top toolbar ── */}
-      <div className="absolute top-4 inset-x-0 z-20 flex items-center justify-center gap-1.5 pointer-events-auto px-4">
+      <div className="absolute top-16 inset-x-0 z-20 flex items-center justify-center gap-1.5 pointer-events-auto px-4">
         {(["nominal", "ppp", "growth", "perCapita"] as ColorDimension[]).map(dim => (
           <button
             key={dim}

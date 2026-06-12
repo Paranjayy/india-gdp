@@ -32,6 +32,8 @@ type Props = {
 
 export default function GlobeHero({ phi = -15, lockLambda }: Props) {
   const [lambda, setLambda] = useState(70); // Centered near India/Asia initially
+  const [targetRot, setTargetRot] = useState<[number, number] | null>(null);
+  const [localPhi, setLocalPhi] = useState(phi);
   const draggingRef = useRef(false);
   const didDragRef = useRef(false);
   const pointerDownXRef = useRef<number | null>(null);
@@ -43,7 +45,16 @@ export default function GlobeHero({ phi = -15, lockLambda }: Props) {
 
   useEffect(() => {
     lockLambdaRef.current = lockLambda;
+    if (lockLambda !== undefined) {
+      setTargetRot(null); // release target focus if scrolling takes over
+    }
   }, [lockLambda]);
+
+  useEffect(() => {
+    if (targetRot === null) {
+      setLocalPhi(phi);
+    }
+  }, [phi, targetRot]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -61,7 +72,18 @@ export default function GlobeHero({ phi = -15, lockLambda }: Props) {
     let raf = 0;
     const tick = () => {
       const lock = lockLambdaRef.current;
-      if (lock !== undefined) {
+      if (targetRot !== null) {
+        setLambda((current) => {
+          const diff = ((((targetRot[0] - current) % 360) + 540) % 360) - 180;
+          if (Math.abs(diff) < 0.05) return targetRot[0];
+          return current + diff * LERP_RATE;
+        });
+        setLocalPhi((current) => {
+          const diff = targetRot[1] - current;
+          if (Math.abs(diff) < 0.05) return targetRot[1];
+          return current + diff * LERP_RATE;
+        });
+      } else if (lock !== undefined) {
         setLambda((current) => {
           const diff = ((((lock - current) % 360) + 540) % 360) - 180;
           if (Math.abs(diff) < 0.05) return lock;
@@ -78,14 +100,14 @@ export default function GlobeHero({ phi = -15, lockLambda }: Props) {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [targetRot]);
 
   const projectionConfig = useMemo(
     () => ({
       scale: 380,
-      rotate: [lambda, phi, 0] as [number, number, number],
+      rotate: [lambda, localPhi, 0] as [number, number, number],
     }),
-    [lambda, phi],
+    [lambda, localPhi],
   );
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -169,6 +191,22 @@ export default function GlobeHero({ phi = -15, lockLambda }: Props) {
                 <Geography
                   key={geo.rsmKey}
                   geography={geo}
+                  onClick={() => {
+                    if (didDragRef.current) return;
+                    const coordsMap: Record<number, [number, number]> = {
+                      356: [-78, -22],   // India [78, 22]
+                      840: [95, -37],    // US [-95, 37]
+                      156: [-104, -35],  // China [104, 35]
+                      276: [-10, -51],   // Germany [10, 51]
+                      392: [-138, -36],  // Japan [138, 36]
+                      250: [-2, -46],    // France [2, 46]
+                      826: [2, -55],     // UK [-2, 55]
+                    };
+                    const targetCoords = coordsMap[numId];
+                    if (targetCoords) {
+                      setTargetRot(targetCoords);
+                    }
+                  }}
                   style={{
                     default: {
                       fill: isIndia ? "#FF9933" : LAND,
@@ -176,11 +214,13 @@ export default function GlobeHero({ phi = -15, lockLambda }: Props) {
                       strokeWidth: isIndia ? 0.8 : 0,
                       outline: "none",
                       transition: "fill 180ms",
+                      cursor: isHighlight ? "pointer" : "default",
                     },
                     hover: {
                       fill: isIndia ? "#FF8811" : isHighlight ? LAND_HOVER : LAND,
                       stroke: "none",
                       outline: "none",
+                      cursor: isHighlight ? "pointer" : "default",
                     },
                     pressed: {
                       fill: isIndia ? "#FF8811" : isHighlight ? LAND_HOVER : LAND,
