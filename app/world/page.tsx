@@ -4,7 +4,6 @@ import { useState, useMemo, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { WORLD_GDP, formatGDP, type CountryGDP, type Region, type IncomeGroup } from "@/lib/gdpData";
-import ThemeToggle from "@/components/ui/ThemeToggle";
 import FadeInOnView from "@/components/ui/FadeInOnView";
 import { useScrollProgress } from "@/lib/useScrollProgress";
 
@@ -170,10 +169,9 @@ export default function WorldGDPPage() {
 
   return (
     <>
-      <ThemeToggle />
 
       {/* World Map revealed as user scrolls past hero */}
-      <WorldMap revealProgress={progress} highlightIso3="NONE" defaultCenter={[0, 0]} />
+      <WorldMap revealProgress={progress} />
 
       {/* Hero overlaid on top of map */}
       <section

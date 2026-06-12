@@ -288,22 +288,17 @@ interface TooltipState {
 
 interface Props {
   revealProgress: number;
-  highlightIso3?: string;
-  defaultCenter?: [number, number];
 }
 
 // Build a quick lookup map
 const GDP_LOOKUP = new Map<string, CountryGDP>();
 WORLD_GDP.forEach(c => GDP_LOOKUP.set(c.iso3, c));
 
-export default function WorldMap({ revealProgress, highlightIso3 = "IND", defaultCenter }: Props) {
+export default function WorldMap({ revealProgress }: Props) {
   const [colorDim, setColorDim] = useState<ColorDimension>("nominal");
   const [selectedCountry, setSelectedCountry] = useState<CountryGDP | null>(null);
   const [tooltip, setTooltip] = useState<TooltipState>({ visible: false, x: 0, y: 0, country: null });
-  
-  const initialCenter = defaultCenter || (highlightIso3 === "IND" ? [20, 15] : [0, 0]);
-  const [position, setPosition] = useState({ coordinates: initialCenter as [number, number], zoom: 1 });
-
+  const [position, setPosition] = useState({ coordinates: [78, 22] as [number, number], zoom: 1 });
   const containerRef = useRef<HTMLDivElement>(null);
 
   const mapOpacity = Math.min(1, revealProgress * 1.8);
@@ -311,15 +306,15 @@ export default function WorldMap({ revealProgress, highlightIso3 = "IND", defaul
 
   const getColor = useCallback((iso3: string): string => {
     const c = GDP_LOOKUP.get(iso3);
-    const isHighlighted = iso3 === highlightIso3;
-    if (!c) return "var(--color-map-neutral)";
+    const isIndia = iso3 === "IND";
+    if (!c) return "#E8E8E8";
     switch (colorDim) {
-      case "nominal":    return getGDPColor(c.nominalGDP, isHighlighted);
-      case "growth":     return getGrowthColor(c.growthRate, isHighlighted);
-      case "perCapita":  return getPerCapitaColor(c.perCapita, isHighlighted);
-      case "ppp":        return getGDPColor(c.pppGDP, isHighlighted);
+      case "nominal":    return getGDPColor(c.nominalGDP, isIndia);
+      case "growth":     return getGrowthColor(c.growthRate, isIndia);
+      case "perCapita":  return getPerCapitaColor(c.perCapita, isIndia);
+      case "ppp":        return getGDPColor(c.pppGDP, isIndia);
     }
-  }, [colorDim, highlightIso3]);
+  }, [colorDim]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     setTooltip(prev => ({ ...prev, x: e.clientX, y: e.clientY }));
@@ -352,7 +347,7 @@ export default function WorldMap({ revealProgress, highlightIso3 = "IND", defaul
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-0 bg-map-bg"
+      className="fixed inset-0 z-0 bg-[--color-bg]"
       style={{ opacity: mapOpacity, willChange: "opacity" }}
       onMouseMove={handleMouseMove}
     >
@@ -365,7 +360,7 @@ export default function WorldMap({ revealProgress, highlightIso3 = "IND", defaul
             className={`px-3 py-1.5 rounded-full text-[11px] font-medium tracking-tight border transition-all cursor-pointer ${
               colorDim === dim
                 ? "bg-[--color-ink] text-white border-[--color-ink]"
-                : "bg-white/80 text-muted border-hairline hover:bg-white hover:text-ink backdrop-blur"
+                : "bg-white/80 text-[--color-muted] border-[--color-hairline] hover:bg-white hover:text-[--color-ink] backdrop-blur"
             }`}
           >
             {dimLabel[dim]}
@@ -376,9 +371,9 @@ export default function WorldMap({ revealProgress, highlightIso3 = "IND", defaul
       {/* ── Map ── */}
       <ComposableMap
         projection="geoNaturalEarth1"
-        projectionConfig={{ scale: 135, center: [0, 0] }}
+        projectionConfig={{ scale: 185, center: [10, 10] }}
         className="w-full h-full"
-        style={{ background: "var(--color-map-bg)" }}
+        style={{ background: "#EEF2F7" }}
       >
         <ZoomableGroup
           zoom={position.zoom}
@@ -392,7 +387,7 @@ export default function WorldMap({ revealProgress, highlightIso3 = "IND", defaul
                 const iso3 = ISO_NUMERIC_MAP[numId] ?? "";
                 const color = getColor(iso3);
                 const isSelected = selectedCountry?.iso3 === iso3;
-                const isHighlighted = iso3 === highlightIso3;
+                const isIndia = iso3 === "IND";
 
                 return (
                   <Geography
@@ -404,15 +399,15 @@ export default function WorldMap({ revealProgress, highlightIso3 = "IND", defaul
                     style={{
                       default: {
                         fill: color,
-                        stroke: isSelected ? "var(--color-map-selected-stroke)" : isHighlighted ? "#FF6B35" : "var(--color-map-stroke)",
-                        strokeWidth: isSelected ? 1.5 : isHighlighted ? 1.2 : 0.4,
+                        stroke: isSelected ? "#1D1D1F" : isIndia ? "#FF6B35" : "#FFFFFF",
+                        strokeWidth: isSelected ? 1.5 : isIndia ? 1.2 : 0.4,
                         outline: "none",
                         cursor: iso3 ? "pointer" : "default",
                         transition: "fill 0.2s",
                       },
                       hover: {
-                        fill: isHighlighted ? "#FF6B35" : "#374151",
-                        stroke: "var(--color-map-selected-stroke)",
+                        fill: isIndia ? "#FF6B35" : "#374151",
+                        stroke: "#1D1D1F",
                         strokeWidth: 0.8,
                         outline: "none",
                       },
@@ -432,20 +427,20 @@ export default function WorldMap({ revealProgress, highlightIso3 = "IND", defaul
           className="fixed z-30 pointer-events-none animate-popup-enter"
           style={{ left: tooltip.x + 14, top: tooltip.y - 60 }}
         >
-          <div className="bg-white rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.12)] border border-hairline px-3.5 py-2.5 min-w-[180px]">
+          <div className="bg-white rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.12)] border border-[--color-hairline] px-3.5 py-2.5 min-w-[180px]">
             <div className="flex items-center gap-2 mb-1.5">
               <span className="text-lg">{tooltip.country.flag}</span>
-              <span className="text-sm font-semibold text-ink">{tooltip.country.name}</span>
+              <span className="text-sm font-semibold text-[--color-ink]">{tooltip.country.name}</span>
             </div>
             <div className="space-y-0.5">
               <div className="flex justify-between gap-6 text-[11px]">
-                <span className="text-muted">Nominal GDP</span>
-                <span className="font-medium text-ink tabular-nums">
+                <span className="text-[--color-muted]">Nominal GDP</span>
+                <span className="font-medium text-[--color-ink] tabular-nums">
                   {formatGDP(tooltip.country.nominalGDP)}
                 </span>
               </div>
               <div className="flex justify-between gap-6 text-[11px]">
-                <span className="text-muted">Growth 2026</span>
+                <span className="text-[--color-muted]">Growth 2026</span>
                 <span
                   className="font-medium tabular-nums"
                   style={{ color: tooltip.country.growthRate >= 0 ? "#22c55e" : "#ef4444" }}
@@ -454,14 +449,14 @@ export default function WorldMap({ revealProgress, highlightIso3 = "IND", defaul
                 </span>
               </div>
               <div className="flex justify-between gap-6 text-[11px]">
-                <span className="text-muted">Per Capita</span>
-                <span className="font-medium text-ink tabular-nums">
+                <span className="text-[--color-muted]">Per Capita</span>
+                <span className="font-medium text-[--color-ink] tabular-nums">
                   ${tooltip.country.perCapita.toLocaleString()}
                 </span>
               </div>
-              {tooltip.country.iso3 !== highlightIso3 && highlightIso3 && (
-                <div className="mt-1.5 pt-1.5 border-t border-hairline text-[10px] text-muted">
-                  {GDP_LOOKUP.get(highlightIso3)?.name || highlightIso3} = {((GDP_LOOKUP.get(highlightIso3)?.nominalGDP || 0) / tooltip.country.nominalGDP * 100).toFixed(1)}% of this country&apos;s GDP
+              {tooltip.country.iso3 !== "IND" && (
+                <div className="mt-1.5 pt-1.5 border-t border-[--color-hairline] text-[10px] text-[--color-muted]">
+                  India = {((india.nominalGDP / tooltip.country.nominalGDP) * 100).toFixed(1)}% of this country&apos;s GDP
                 </div>
               )}
             </div>
@@ -471,11 +466,11 @@ export default function WorldMap({ revealProgress, highlightIso3 = "IND", defaul
 
       {/* ── Side panel ── */}
       {selectedCountry && (
-        <div className="absolute right-0 top-0 bottom-0 z-20 w-80 bg-white border-l border-hairline shadow-[−4px_0_24px_rgba(0,0,0,0.06)] overflow-y-auto animate-popup-enter">
+        <div className="absolute right-0 top-0 bottom-0 z-20 w-80 bg-white border-l border-[--color-hairline] shadow-[−4px_0_24px_rgba(0,0,0,0.06)] overflow-y-auto animate-popup-enter">
           <div className="p-5">
             <button
               onClick={() => setSelectedCountry(null)}
-              className="mb-4 text-muted hover:text-ink transition-colors text-xs flex items-center gap-1"
+              className="mb-4 text-[--color-muted] hover:text-[--color-ink] transition-colors text-xs flex items-center gap-1"
             >
               ← Close
             </button>
@@ -483,8 +478,8 @@ export default function WorldMap({ revealProgress, highlightIso3 = "IND", defaul
             <div className="flex items-center gap-3 mb-5">
               <span className="text-4xl">{selectedCountry.flag}</span>
               <div>
-                <h3 className="text-xl font-semibold text-ink">{selectedCountry.name}</h3>
-                <span className="text-[11px] text-muted">{selectedCountry.region}</span>
+                <h3 className="text-xl font-semibold text-[--color-ink]">{selectedCountry.name}</h3>
+                <span className="text-[11px] text-[--color-muted]">{selectedCountry.region}</span>
               </div>
             </div>
 
@@ -498,63 +493,40 @@ export default function WorldMap({ revealProgress, highlightIso3 = "IND", defaul
                 { label: "Population", value: `${selectedCountry.population.toFixed(0)}M` },
                 { label: "Global Rank", value: `#${WORLD_GDP.sort((a, b) => b.nominalGDP - a.nominalGDP).findIndex(c => c.iso3 === selectedCountry.iso3) + 1}` },
               ].map(stat => (
-                <div key={stat.label} className="bg-bg rounded-lg p-3">
-                  <div className="text-[10px] text-muted mb-1">{stat.label}</div>
-                  <div className="text-base font-semibold text-ink" style={{ color: stat.color }}>
+                <div key={stat.label} className="bg-[--color-bg] rounded-lg p-3">
+                  <div className="text-[10px] text-[--color-muted] mb-1">{stat.label}</div>
+                  <div className="text-base font-semibold text-[--color-ink]" style={{ color: stat.color }}>
                     {stat.value}
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* Highlighted Country comparison */}
-            {selectedCountry.iso3 !== highlightIso3 && highlightIso3 && (() => {
-              const target = GDP_LOOKUP.get(highlightIso3);
-              if (!target) return null;
-              const ratio = ((target.nominalGDP / selectedCountry.nominalGDP) * 100).toFixed(1);
-              const growthAdv = (target.growthRate - selectedCountry.growthRate).toFixed(1);
-              const perCapitaMultiplier = Math.round(selectedCountry.perCapita / Math.max(1, target.perCapita));
-
-              return (
-                <div className="border border-hairline rounded-xl p-4">
-                  <div className="text-[11px] font-medium text-muted mb-3">
-                    {target.flag} {target.name} vs {selectedCountry.flag}
-                  </div>
-                  <div className="space-y-2">
-                    <div className="text-[11px]">
-                      <span className="text-muted">GDP ratio: </span>
-                      <span className="font-medium text-ink">
-                        {target.name} = {ratio}% of {selectedCountry.name}
+            {/* India comparison */}
+            {selectedCountry.iso3 !== "IND" && (
+              <div className="border border-[--color-hairline] rounded-xl p-4">
+                <div className="text-[11px] font-medium text-[--color-muted] mb-3">🇮🇳 India vs {selectedCountry.flag}</div>
+                <div className="space-y-2">
+                  {[
+                    { label: "GDP ratio", value: `India = ${((india.nominalGDP / selectedCountry.nominalGDP) * 100).toFixed(1)}% of ${selectedCountry.name}` },
+                    { label: "Growth advantage", value: `India grows ${(india.growthRate - selectedCountry.growthRate).toFixed(1)}pp faster`, positive: india.growthRate > selectedCountry.growthRate },
+                    { label: "Per capita gap", value: `${selectedCountry.name} earns ${Math.round(selectedCountry.perCapita / india.perCapita)}× more per person` },
+                    { label: "PPP rank", value: india.pppGDP > selectedCountry.pppGDP ? `India larger by PPP (${formatGDP(india.pppGDP)} vs ${formatGDP(selectedCountry.pppGDP)})` : `${selectedCountry.name} larger by PPP` },
+                  ].map(row => (
+                    <div key={row.label} className="text-[11px]">
+                      <span className="text-[--color-muted]">{row.label}: </span>
+                      <span className={`font-medium ${row.positive === true ? "text-green-600" : row.positive === false ? "text-red-500" : "text-[--color-ink]"}`}>
+                        {row.value}
                       </span>
                     </div>
-                    <div className="text-[11px]">
-                      <span className="text-muted">Growth advantage: </span>
-                      <span className={`font-medium ${parseFloat(growthAdv) > 0 ? "text-green-600" : parseFloat(growthAdv) < 0 ? "text-red-500" : "text-ink"}`}>
-                        {target.name} grows {parseFloat(growthAdv) > 0 ? "+" : ""}{growthAdv}pp faster
-                      </span>
-                    </div>
-                    {perCapitaMultiplier > 1 && (
-                      <div className="text-[11px]">
-                        <span className="text-muted">Per capita gap: </span>
-                        <span className="font-medium text-ink">
-                          {selectedCountry.name} earns {perCapitaMultiplier}× more per person
-                        </span>
-                      </div>
-                    )}
-                    <div className="text-[11px]">
-                      <span className="text-muted">PPP comparison: </span>
-                      <span className="font-medium text-ink">
-                        {target.pppGDP > selectedCountry.pppGDP ? `${target.name} larger by PPP` : `${selectedCountry.name} larger by PPP`}
-                      </span>
-                    </div>
-                  </div>
+                  ))}
                 </div>
-              );
-            })()}
+              </div>
+            )}
 
             {selectedCountry.debtGDP && (
-              <div className="mt-3 text-[11px] text-muted">
-                Debt/GDP: <span className="text-ink font-medium">{selectedCountry.debtGDP}%</span>
+              <div className="mt-3 text-[11px] text-[--color-muted]">
+                Debt/GDP: <span className="text-[--color-ink] font-medium">{selectedCountry.debtGDP}%</span>
               </div>
             )}
           </div>
@@ -562,25 +534,19 @@ export default function WorldMap({ revealProgress, highlightIso3 = "IND", defaul
       )}
 
       {/* ── Legend ── */}
-      <div className="absolute bottom-4 left-4 z-20 bg-white/90 backdrop-blur-sm rounded-xl border border-hairline px-3 py-2">
-        <div className="text-[10px] text-muted mb-1.5">{dimLabel[colorDim]}</div>
+      <div className="absolute bottom-4 left-4 z-20 bg-white/90 backdrop-blur-sm rounded-xl border border-[--color-hairline] px-3 py-2">
+        <div className="text-[10px] text-[--color-muted] mb-1.5">{dimLabel[colorDim]}</div>
         <div className="flex gap-1 items-center">
           {colorDim === "growth" ? (
             <>
               <div className="w-3 h-3 rounded-sm bg-[#DC2626]" />
-              <span className="text-[9px] text-muted">Negative</span>
+              <span className="text-[9px] text-[--color-muted]">Negative</span>
               <div className="w-3 h-3 rounded-sm bg-[#FBBF24] ml-1" />
-              <span className="text-[9px] text-muted">Slow</span>
+              <span className="text-[9px] text-[--color-muted]">Slow</span>
               <div className="w-3 h-3 rounded-sm bg-[#22C55E] ml-1" />
-              <span className="text-[9px] text-muted">Fast</span>
-              {highlightIso3 && highlightIso3 !== "NONE" && (
-                <>
-                  <div className="w-3 h-3 rounded-sm bg-[#FF6B35] ml-1" />
-                  <span className="text-[9px] text-muted">
-                    {highlightIso3 === "IND" ? "India" : (GDP_LOOKUP.get(highlightIso3)?.name || "Target")}
-                  </span>
-                </>
-              )}
+              <span className="text-[9px] text-[--color-muted]">Fast</span>
+              <div className="w-3 h-3 rounded-sm bg-[#FF6B35] ml-1" />
+              <span className="text-[9px] text-[--color-muted]">India</span>
             </>
           ) : (
             <>
@@ -588,22 +554,16 @@ export default function WorldMap({ revealProgress, highlightIso3 = "IND", defaul
               <div className="w-3 h-3 rounded-sm bg-[#93C5FD]" />
               <div className="w-3 h-3 rounded-sm bg-[#2563EB]" />
               <div className="w-3 h-3 rounded-sm bg-[#1E40AF]" />
-              <span className="text-[9px] text-muted ml-1">Low → High</span>
-              {highlightIso3 && highlightIso3 !== "NONE" && (
-                <>
-                  <div className="w-3 h-3 rounded-sm bg-[#FF6B35] ml-2" />
-                  <span className="text-[9px] text-muted">
-                    {highlightIso3 === "IND" ? "India" : (GDP_LOOKUP.get(highlightIso3)?.name || "Target")}
-                  </span>
-                </>
-              )}
+              <span className="text-[9px] text-[--color-muted] ml-1">Low → High</span>
+              <div className="w-3 h-3 rounded-sm bg-[#FF6B35] ml-2" />
+              <span className="text-[9px] text-[--color-muted]">India</span>
             </>
           )}
         </div>
       </div>
 
       {/* Live indicator */}
-      <div className="absolute top-14 right-4 z-20 text-[10px] text-muted flex items-center gap-1.5">
+      <div className="absolute top-14 right-4 z-20 text-[10px] text-[--color-muted] flex items-center gap-1.5">
         <span className="live-dot" />
         IMF WEO April 2026
       </div>

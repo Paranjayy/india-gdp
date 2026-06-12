@@ -6,8 +6,6 @@ import Hero from "@/components/hero/Hero";
 import { useScrollProgress } from "@/lib/useScrollProgress";
 import FadeInOnView from "@/components/ui/FadeInOnView";
 
-import ThemeToggle from "@/components/ui/ThemeToggle";
-
 const WorldMap = dynamic(() => import("@/components/map/WorldMap"), { ssr: false });
 const SummarySection = dynamic(() => import("@/components/sections/SummarySection"));
 const TimelineSection = dynamic(() => import("@/components/sections/TimelineSection"));
@@ -24,7 +22,6 @@ export default function PageClient() {
 
   return (
     <>
-      <ThemeToggle />
       {/* Fixed world map — revealed as user scrolls past hero */}
       <WorldMap revealProgress={progress} />
 

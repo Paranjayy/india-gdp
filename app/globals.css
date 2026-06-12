@@ -1,46 +1,20 @@
 @import "tailwindcss";
 
-:root {
-  --bg: #FAFAF8;
-  --card: #FFFFFF;
-  --ink: #1D1D1F;
-  --muted: #86868B;
-  --hairline: rgba(0, 0, 0, 0.06);
-  --map-neutral: #ECECEC;
-  --map-stroke: #D2D2D2;
-  --map-bg: #EEF2F7;
-  --map-selected-stroke: #1D1D1F;
-}
-
-.dark {
-  --bg: #121214;
-  --card: #1E1E22;
-  --ink: #E4E4E7;
-  --muted: #A1A1AA;
-  --hairline: rgba(255, 255, 255, 0.08);
-  --map-neutral: #27272C;
-  --map-stroke: #3F3F46;
-  --map-bg: #18181B;
-  --map-selected-stroke: #E4E4E7;
-}
-
 @theme {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
   /* Base palette — warm off-white (forked from track-policy) */
-  --color-bg: var(--bg);
-  --color-card: var(--card);
+  --color-bg: #FAFAF8;
+  --color-card: #FFFFFF;
 
   /* Apple-style ink + muted */
-  --color-ink: var(--ink);
-  --color-muted: var(--muted);
-  --color-hairline: var(--hairline);
+  --color-ink: #1D1D1F;
+  --color-muted: #86868B;
+  --color-hairline: rgba(0, 0, 0, 0.06);
 
   /* Map base */
-  --color-map-neutral: var(--map-neutral);
-  --color-map-stroke: var(--map-stroke);
-  --color-map-bg: var(--map-bg);
-  --color-map-selected-stroke: var(--map-selected-stroke);
+  --color-map-neutral: #ECECEC;
+  --color-map-stroke: #D2D2D2;
   --color-map-india: #FF6B35;
 
   /* GDP scale — blue (low) → amber → saffron (high India-inspired) */
@@ -73,11 +47,6 @@ html, body {
   background-color: var(--color-bg);
   color: var(--color-ink);
   font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-html, body, section, footer, header, div.bg-white, div.bg-bg, div.bg-card, button, select, input, textarea {
-  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* iOS Safari auto-zoom prevention */
@@ -215,8 +184,7 @@ html, body, section, footer, header, div.bg-white, div.bg-bg, div.bg-card, butto
 /* ─── Custom scrollbar ──────────────────────────────────────── */
 *::-webkit-scrollbar { width: 6px; height: 6px; }
 *::-webkit-scrollbar-thumb {
-  background: var(--color-ink);
-  opacity: 0.15;
+  background: rgba(0,0,0,0.12);
   border-radius: 999px;
 }
 *::-webkit-scrollbar-track { background: transparent; }
