@@ -1,0 +1,208 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* Base palette — warm off-white (forked from track-policy) */
+  --color-bg: #FAFAF8;
+  --color-card: #FFFFFF;
+
+  /* Apple-style ink + muted */
+  --color-ink: #1D1D1F;
+  --color-muted: #86868B;
+  --color-hairline: rgba(0, 0, 0, 0.06);
+
+  /* Map base */
+  --color-map-neutral: #ECECEC;
+  --color-map-stroke: #D2D2D2;
+  --color-map-india: #FF6B35;
+
+  /* GDP scale — blue (low) → amber → saffron (high India-inspired) */
+  --color-gdp-0: #E8F0FE;
+  --color-gdp-1: #A8C4F8;
+  --color-gdp-2: #6499F0;
+  --color-gdp-3: #2563EB;
+  --color-gdp-4: #1E40AF;
+
+  /* Growth rate palette */
+  --color-growth-neg: #CC6B63;
+  --color-growth-slow: #D9C980;
+  --color-growth-med: #7EBC8E;
+  --color-growth-fast: #22863A;
+  --color-growth-india: #FF6B35;
+
+  /* India accent saffron-green tricolor */
+  --color-india-saffron: #FF9933;
+  --color-india-white: #FFFFFF;
+  --color-india-green: #138808;
+  --color-india-navy: #000080;
+
+  /* Sector colors */
+  --color-sector-services: #2563EB;
+  --color-sector-industry: #D97706;
+  --color-sector-agriculture: #16A34A;
+}
+
+html, body {
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* iOS Safari auto-zoom prevention */
+@media (max-width: 768px) {
+  input, textarea, select { font-size: 16px; }
+}
+
+/* ─── Scroll reveal hero ────────────────────────────────────── */
+@keyframes scroll-hint {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+/* ─── Map drill animations ─────────────────────────────────── */
+@keyframes drill-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1);    }
+}
+@keyframes drill-out {
+  from { opacity: 0; transform: scale(1.08); }
+  to   { opacity: 1; transform: scale(1);    }
+}
+.animate-drill-in {
+  animation: drill-in 380ms cubic-bezier(0.32, 0.72, 0, 1) both;
+  transform-origin: center center;
+  will-change: transform, opacity;
+}
+.animate-drill-out {
+  animation: drill-out 380ms cubic-bezier(0.32, 0.72, 0, 1) both;
+  transform-origin: center center;
+  will-change: transform, opacity;
+}
+
+/* ─── Highlight sweep (section facts) ──────────────────────── */
+@keyframes highlight-sweep {
+  from { background-size: 0% 100%; }
+  to   { background-size: 100% 100%; }
+}
+.highlight-sweep {
+  background-image: linear-gradient(
+    120deg,
+    rgba(255, 153, 51, 0.2) 0%,
+    rgba(255, 153, 51, 0.2) 100%
+  );
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: 0% 100%;
+  animation: highlight-sweep 600ms cubic-bezier(0.32, 0.72, 0, 1) both;
+  animation-delay: var(--sweep-delay, 0ms);
+  padding: 1px 3px;
+  margin: 0 -3px;
+  border-radius: 3px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* ─── Fade rise (section reveals) ──────────────────────────── */
+@keyframes fade-rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+.animate-fade-rise {
+  animation: fade-rise 380ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+/* ─── Live dot (data freshness indicator) ───────────────────── */
+@keyframes live-dot-breath {
+  0%   { transform: scale(1);   opacity: 0.55; }
+  70%  { transform: scale(2.4); opacity: 0;    }
+  100% { transform: scale(2.4); opacity: 0;    }
+}
+.live-dot {
+  position: relative;
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 9999px;
+  background: var(--color-india-saffron);
+  box-shadow: 0 0 0 2px rgba(255, 153, 51, 0.2);
+  vertical-align: middle;
+}
+.live-dot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: var(--color-india-saffron);
+  animation: live-dot-breath 2s cubic-bezier(0.32, 0.72, 0, 1) infinite;
+  transform-origin: center;
+}
+
+/* ─── Popup entrance ────────────────────────────────────────── */
+@keyframes popup-enter {
+  from { opacity: 0; transform: scale(0.95) translateY(4px); }
+  to   { opacity: 1; transform: scale(1) translateY(0);      }
+}
+.animate-popup-enter {
+  animation: popup-enter 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  transform-origin: var(--popup-origin, top center);
+  will-change: transform, opacity;
+}
+
+/* ─── GDP number counter animation ─────────────────────────── */
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+.animate-count-up {
+  animation: count-up 600ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+/* ─── Accordion ─────────────────────────────────────────────── */
+.accordion {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.accordion[data-open="true"] { grid-template-rows: 1fr; }
+.accordion > .accordion-inner { overflow: hidden; min-height: 0; }
+
+.chevron {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.chevron[data-open="true"] { transform: rotate(90deg); }
+
+/* ─── Timeline scrubber styles ──────────────────────────────── */
+.milestone-marker {
+  transition: opacity 0.2s, transform 0.2s;
+}
+.milestone-marker:hover {
+  opacity: 1 !important;
+  transform: scaleY(1.5) !important;
+}
+
+/* ─── Custom scrollbar ──────────────────────────────────────── */
+*::-webkit-scrollbar { width: 6px; height: 6px; }
+*::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.12);
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-track { background: transparent; }
+
+/* ─── Focus visible ─────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid oklch(0.55 0.15 250);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ─── Reduced motion ────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .live-dot::before { animation: none; opacity: 0.25; }
+}

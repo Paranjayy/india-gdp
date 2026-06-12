@@ -1,0 +1,107 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+
+interface Props {
+  progress: number;
+}
+
+const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n));
+
+export default function Hero({ progress }: Props) {
+  const headlineOpacity = clamp(1 - progress / 0.2, 0, 1);
+  const headlineY = -progress * 40;
+  const hintOpacity = clamp(1 - (progress - 0.45) / 0.15, 0, 1);
+  const hintProgress = Math.min(100, (progress / 0.55) * 100);
+
+  // Bounce hint — nudges user to scroll after 2.5s of idle
+  useEffect(() => {
+    let userScrolled = false;
+    let bouncing = false;
+    const onScroll = () => { if (!bouncing) userScrolled = true; };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    const t = window.setTimeout(() => {
+      if (userScrolled) return;
+      bouncing = true;
+      window.scrollTo({ top: Math.round(window.innerHeight * 0.15), behavior: "smooth" });
+      window.setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 750);
+    }, 2500);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
+  const inactive = progress > 0.92;
+
+  return (
+    <section
+      className="fixed inset-0 z-20 overflow-hidden"
+      style={{ pointerEvents: inactive ? "none" : "auto" }}
+      aria-hidden={inactive}
+    >
+      {/* Background fade */}
+      <div
+        className="absolute inset-0 bg-[--color-bg]"
+        style={{ opacity: clamp(1 - (progress - 0.6) / 0.4, 0, 1) }}
+      />
+
+      {/* Headline */}
+      <div
+        className="absolute inset-x-0 top-[22vh] md:top-[16vh] z-10 px-6 text-center pointer-events-none"
+        style={{
+          opacity: headlineOpacity,
+          transform: `translateY(${headlineY}px)`,
+          willChange: "transform, opacity",
+        }}
+      >
+        {/* India flag tricolor strip */}
+        <div className="flex justify-center mb-6">
+          <div className="flex flex-col w-12 h-8 rounded overflow-hidden shadow-sm">
+            <div className="flex-1 bg-[--color-india-saffron]" />
+            <div className="flex-1 bg-white flex items-center justify-center">
+              <div className="w-3 h-3 rounded-full border-2 border-[--color-india-navy]" />
+            </div>
+            <div className="flex-1 bg-[--color-india-green]" />
+          </div>
+        </div>
+
+        <h1 className="text-4xl sm:text-6xl md:text-7xl font-semibold tracking-tight text-[--color-ink] leading-[1.05]">
+          India&rsquo;s economy
+          <br />
+          <span className="text-[--color-india-saffron]">in the world</span>
+        </h1>
+        <p className="mt-5 text-[15px] md:text-[17px] text-[--color-muted] max-w-md mx-auto leading-relaxed">
+          60+ years of GDP data. Every major event. Every country comparison.
+          Raw, accurate, no agenda.
+        </p>
+      </div>
+
+      {/* Scroll hint */}
+      <div
+        className="absolute inset-x-0 bottom-[6vh] z-20 flex flex-col items-center gap-2.5 pointer-events-none"
+        style={{ opacity: hintOpacity }}
+        aria-hidden
+      >
+        <div className="flex items-center gap-1.5">
+          <span className="text-xs font-medium text-[--color-ink] tracking-tight">
+            Scroll to explore
+          </span>
+          <svg
+            width="12" height="12" viewBox="0 0 12 12" fill="none"
+            className="text-[--color-ink]"
+            style={{ animation: "scroll-hint 1.8s ease-in-out infinite" }}
+          >
+            <path d="M3 4.5l3 3 3-3" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+        <div className="relative w-40 h-[2px] rounded-full bg-[--color-ink]/10 overflow-hidden">
+          <div
+            className="absolute inset-y-0 left-0 rounded-full bg-[--color-ink]"
+            style={{ width: `${hintProgress}%` }}
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
