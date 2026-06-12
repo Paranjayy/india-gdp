@@ -528,13 +528,37 @@ export default function WorldMap({ revealProgress, selectedCountry: propSelected
       {/* ── Side panel ── */}
       {selectedCountry && (
         <div className="absolute right-0 top-0 bottom-0 z-20 w-80 bg-white border-l border-[--color-hairline] shadow-[−4px_0_24px_rgba(0,0,0,0.06)] overflow-y-auto animate-popup-enter">
-          <div className="p-5">
+          {/* Mac-style traffic-light controls */}
+          <div className="group/tl flex items-center gap-1.5 px-5 pt-5 pb-1 flex-shrink-0">
             <button
+              type="button"
               onClick={() => setSelectedCountry(null)}
-              className="mb-4 text-[--color-muted] hover:text-[--color-ink] transition-colors text-xs flex items-center gap-1"
+              aria-label="Close"
+              title="Close"
+              className="relative w-3.5 h-3.5 rounded-full bg-[#FF5F57] hover:brightness-90 active:brightness-75 transition cursor-pointer"
             >
-              ← Close
+              <svg viewBox="0 0 12 12" className="absolute inset-0 w-full h-full opacity-0 group-hover/tl:opacity-100 transition-opacity">
+                <path d="M3 3 L9 9 M9 3 L3 9" stroke="#4D0000" strokeWidth="1.2" strokeLinecap="round" />
+              </svg>
             </button>
+            <button
+              type="button"
+              onClick={() => setSelectedCountry(null)}
+              aria-label="Minimize"
+              title="Minimize"
+              className="relative w-3.5 h-3.5 rounded-full bg-[#FEBC2E] hover:brightness-90 active:brightness-75 transition cursor-pointer"
+            >
+              <svg viewBox="0 0 12 12" className="absolute inset-0 w-full h-full opacity-0 group-hover/tl:opacity-100 transition-opacity">
+                <path d="M2.5 6 H9.5" stroke="#5C3200" strokeWidth="1.3" strokeLinecap="round" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              aria-label="Expand"
+              className="relative w-3.5 h-3.5 rounded-full bg-[#28C840] hover:brightness-90 active:brightness-75 transition cursor-not-allowed"
+            />
+          </div>
+          <div className="p-5 pt-2">
 
             <div className="flex items-center gap-3 mb-5">
               <span className="text-4xl">{selectedCountry.flag}</span>
