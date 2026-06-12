@@ -54,13 +54,12 @@ export default function Hero({ progress }: Props) {
 
   return (
     <section
-      className="fixed inset-0 z-20 overflow-hidden"
-      style={{ pointerEvents: inactive ? "none" : "auto" }}
+      className="fixed inset-0 z-20 overflow-hidden pointer-events-none"
       aria-hidden={inactive}
     >
       {/* Background fade */}
       <div
-        className="absolute inset-0 bg-[--color-bg]"
+        className="absolute inset-0 bg-[--color-bg] pointer-events-none"
         style={{ opacity: bgOpacity }}
       />
 
@@ -119,7 +118,10 @@ export default function Hero({ progress }: Props) {
           willChange: "transform, opacity",
         }}
       >
-        <div className="w-[68vh] h-[68vh] aspect-square pointer-events-auto">
+        <div 
+          className="w-[68vh] h-[68vh] aspect-square"
+          style={{ pointerEvents: progress > 0.15 ? "none" : "auto" }}
+        >
           <GlobeHero
             phi={phi}
             lockLambda={lockLambda}
