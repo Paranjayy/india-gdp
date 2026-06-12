@@ -95,13 +95,13 @@ export default function TimelineSection() {
       {/* Year + GDP hero display */}
       <div className="flex items-end justify-between">
         <div>
-          <div className="text-6xl font-bold tracking-tight text-ink">
+          <div className="text-6xl font-bold tracking-tight text-[--color-ink]">
             {currentData.year}
           </div>
-          <div className="text-2xl font-semibold text-india-saffron mt-1">
+          <div className="text-2xl font-semibold text-[--color-india-saffron] mt-1">
             {formatGDP(currentData.nominal)}
           </div>
-          <div className="text-[13px] text-muted mt-1">
+          <div className="text-[13px] text-[--color-muted] mt-1">
             Rank #{currentData.globalRank} globally · ${currentData.perCapita.toLocaleString()} per capita
             <span className={`ml-2 font-medium ${currentData.growthRate >= 0 ? "text-green-600" : "text-red-500"}`}>
               {currentData.growthRate > 0 ? "+" : ""}{currentData.growthRate}% growth
@@ -111,8 +111,8 @@ export default function TimelineSection() {
 
         {/* Growth callout */}
         <div className="text-right hidden sm:block">
-          <div className="text-[11px] text-muted mb-1">GDP growth vs 1960</div>
-          <div className="text-2xl font-bold text-ink">
+          <div className="text-[11px] text-[--color-muted] mb-1">GDP growth vs 1960</div>
+          <div className="text-2xl font-bold text-[--color-ink]">
             {Math.round(currentData.nominal / INDIA_HISTORICAL[0].nominal)}×
           </div>
         </div>
@@ -160,11 +160,11 @@ export default function TimelineSection() {
         className={`rounded-2xl border p-4 transition-all duration-300 min-h-[80px] ${
           milestone
             ? milestone.effect === "positive"
-              ? "bg-green-50/50 dark:bg-green-950/20 border-green-200/50 dark:border-green-900/30"
+              ? "bg-green-50 border-green-200"
               : milestone.effect === "negative"
-              ? "bg-red-50/50 dark:bg-red-950/20 border-red-200/50 dark:border-red-900/30"
-              : "bg-blue-50/50 dark:bg-blue-950/20 border-blue-200/50 dark:border-blue-900/30"
-            : "bg-bg border-hairline"
+              ? "bg-red-50 border-red-200"
+              : "bg-blue-50 border-blue-200"
+            : "bg-[--color-bg] border-[--color-hairline]"
         }`}
       >
         {milestone ? (
@@ -177,38 +177,38 @@ export default function TimelineSection() {
               }`}>
                 {milestone.effect === "positive" ? "🟢" : milestone.effect === "negative" ? "🔴" : "🔵"} Key event
               </span>
-              <span className="text-xs text-muted">{milestone.year}</span>
+              <span className="text-xs text-[--color-muted]">{milestone.year}</span>
             </div>
-            <div className="text-sm font-semibold text-ink mb-1">{milestone.title}</div>
-            <div className="text-[12px] text-muted leading-relaxed">{milestone.description}</div>
+            <div className="text-sm font-semibold text-[--color-ink] mb-1">{milestone.title}</div>
+            <div className="text-[12px] text-[--color-muted] leading-relaxed">{milestone.description}</div>
           </div>
         ) : (
-          <div className="text-[12px] text-muted flex items-center h-full">
+          <div className="text-[12px] text-[--color-muted] flex items-center h-full">
             Scrub to a milestone year — marked events show key economic turning points.
           </div>
         )}
       </div>
 
       {/* TimeScrubber — forked from track-migrations */}
-      <div className="bg-card rounded-2xl border border-hairline px-5 py-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+      <div className="bg-white rounded-2xl border border-[--color-hairline] px-5 py-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
         {/* Top controls */}
         <div className="flex items-center gap-3 mb-3">
           <button
             onClick={() => setPlaying(p => !p)}
-            className="w-8 h-8 rounded-full bg-[--color-ink]/[.08] text-ink flex items-center justify-center hover:bg-[--color-ink]/[.14] active:scale-[0.94] transition-colors shrink-0 cursor-pointer"
+            className="w-8 h-8 rounded-full bg-[--color-ink]/[.08] text-[--color-ink] flex items-center justify-center hover:bg-[--color-ink]/[.14] active:scale-[0.94] transition-colors shrink-0 cursor-pointer"
             aria-label={playing ? "Pause" : "Play"}
           >
             {playing ? <RiPauseFill size={14} /> : <RiPlayFill size={14} />}
           </button>
           <div className="flex items-baseline gap-2 min-w-0 flex-1">
-            <span className="text-sm font-semibold text-ink tracking-tight">{currentData.year}</span>
-            <span className="text-xs text-muted truncate">
+            <span className="text-sm font-semibold text-[--color-ink] tracking-tight">{currentData.year}</span>
+            <span className="text-xs text-[--color-muted] truncate">
               {formatGDP(currentData.nominal)} nominal GDP
             </span>
           </div>
           <button
             onClick={replay}
-            className="w-8 h-8 rounded-full bg-[--color-ink]/[.08] text-ink flex items-center justify-center hover:bg-[--color-ink]/[.14] active:scale-[0.94] transition-colors shrink-0 cursor-pointer"
+            className="w-8 h-8 rounded-full bg-[--color-ink]/[.08] text-[--color-ink] flex items-center justify-center hover:bg-[--color-ink]/[.14] active:scale-[0.94] transition-colors shrink-0 cursor-pointer"
             aria-label="Replay"
           >
             <RiRestartLine size={14} />
@@ -238,7 +238,7 @@ export default function TimelineSection() {
               style={{ left: `${pct * 100}%`, top: 0, bottom: 0 }}
             >
               <div className="w-px h-2 bg-[--color-ink]/[.12]" />
-              <span className="text-[9px] text-muted/60 mt-0.5 tabular-nums">{year}</span>
+              <span className="text-[9px] text-[--color-muted]/60 mt-0.5 tabular-nums">{year}</span>
             </div>
           ))}
 

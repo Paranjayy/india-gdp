@@ -51,7 +51,7 @@ export default function ComparatorsSection() {
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-medium border transition-all cursor-pointer ${
               activeKeys.has(c.key)
                 ? "text-white border-transparent"
-                : "bg-white text-muted border-hairline hover:text-ink"
+                : "bg-white text-[--color-muted] border-[--color-hairline] hover:text-[--color-ink]"
             }`}
             style={activeKeys.has(c.key) ? { background: c.color, borderColor: c.color } : {}}
           >
@@ -61,7 +61,7 @@ export default function ComparatorsSection() {
       </div>
 
       {/* SVG Line Chart */}
-      <div className="relative bg-card rounded-2xl border border-hairline p-4">
+      <div className="relative bg-white rounded-2xl border border-[--color-hairline] p-4">
         <svg
           viewBox={`0 0 100 ${height}`}
           className="w-full"
@@ -129,19 +129,19 @@ export default function ComparatorsSection() {
         </svg>
 
         {/* Year labels */}
-        <div className="flex justify-between text-[9px] text-muted mt-1 px-1">
+        <div className="flex justify-between text-[9px] text-[--color-muted] mt-1 px-1">
           {years.map(y => <span key={y}>{y}</span>)}
         </div>
 
         {/* Hover data */}
         {hoveredData && (
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white rounded-xl border border-hairline shadow-lg px-3 py-2 pointer-events-none animate-popup-enter z-10">
-            <div className="text-xs font-semibold text-ink mb-1.5">{hoveredData.year}</div>
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white rounded-xl border border-[--color-hairline] shadow-lg px-3 py-2 pointer-events-none animate-popup-enter z-10">
+            <div className="text-xs font-semibold text-[--color-ink] mb-1.5">{hoveredData.year}</div>
             <div className="space-y-0.5">
               {COUNTRIES.filter(c => activeKeys.has(c.key)).map(c => (
                 <div key={c.key} className="flex items-center gap-2 text-[10px]">
                   <div className="w-2 h-2 rounded-full shrink-0" style={{ background: c.color }} />
-                  <span className="text-muted w-24">{c.name}</span>
+                  <span className="text-[--color-muted] w-24">{c.name}</span>
                   <span className="font-medium tabular-nums">{formatGDP(hoveredData[c.key])}</span>
                 </div>
               ))}
@@ -160,24 +160,24 @@ export default function ComparatorsSection() {
           const growthAdv = india.growthRate - target.growthRate;
 
           return (
-            <div key={c.key} className="bg-card rounded-xl border border-hairline p-4">
+            <div key={c.key} className="bg-white rounded-xl border border-[--color-hairline] p-4">
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-xl">{c.flag}</span>
-                <span className="text-sm font-semibold text-ink">{c.name}</span>
+                <span className="text-sm font-semibold text-[--color-ink]">{c.name}</span>
               </div>
               <div className="space-y-1.5">
                 <div className="flex justify-between text-[11px]">
-                  <span className="text-muted">India / {c.name} GDP</span>
+                  <span className="text-[--color-muted]">India / {c.name} GDP</span>
                   <span className="font-medium tabular-nums">{ratio.toFixed(1)}%</span>
                 </div>
-                <div className="w-full h-1.5 rounded-full bg-bg overflow-hidden">
-                  <div className="h-full rounded-full bg-india-saffron" style={{ width: `${Math.min(100, ratio)}%` }} />
+                <div className="w-full h-1.5 rounded-full bg-[--color-bg] overflow-hidden">
+                  <div className="h-full rounded-full bg-[--color-india-saffron]" style={{ width: `${Math.min(100, ratio)}%` }} />
                 </div>
                 <div className={`text-[10px] font-medium ${growthAdv > 0 ? "text-green-600" : "text-red-500"}`}>
                   India grows {growthAdv > 0 ? "+" : ""}{growthAdv.toFixed(1)}pp faster annually
                 </div>
                 {growthAdv > 0 && target.nominalGDP > india.nominalGDP && (
-                  <div className="text-[10px] text-muted">
+                  <div className="text-[10px] text-[--color-muted]">
                     At this rate, India could match {c.name}&apos;s GDP in ~{Math.ceil(
                       Math.log(target.nominalGDP / india.nominalGDP) / Math.log((1 + india.growthRate / 100) / (1 + target.growthRate / 100))
                     )} years

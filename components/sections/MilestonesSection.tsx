@@ -3,9 +3,9 @@
 import { ECONOMIC_MILESTONES } from "@/lib/gdpData";
 
 const effectConfig = {
-  positive: { bg: "bg-green-50/50 dark:bg-green-950/20", border: "border-green-200/50 dark:border-green-900/30", dot: "bg-green-500", badge: "text-green-700 bg-green-100 dark:text-green-300 dark:bg-green-900/50", icon: "↑" },
-  negative: { bg: "bg-red-50/50 dark:bg-red-950/20",   border: "border-red-200/50 dark:border-red-900/30",   dot: "bg-red-500",   badge: "text-red-700 bg-red-100 dark:text-red-300 dark:bg-red-900/50",   icon: "↓" },
-  neutral:  { bg: "bg-blue-50/50 dark:bg-blue-950/20",  border: "border-blue-200/50 dark:border-blue-900/30",  dot: "bg-blue-500",  badge: "text-blue-700 bg-blue-100 dark:text-blue-300 dark:bg-blue-900/50",  icon: "→" },
+  positive: { bg: "bg-green-50", border: "border-green-200", dot: "bg-green-500", badge: "text-green-700 bg-green-100", icon: "↑" },
+  negative: { bg: "bg-red-50",   border: "border-red-200",   dot: "bg-red-500",   badge: "text-red-700 bg-red-100",   icon: "↓" },
+  neutral:  { bg: "bg-blue-50",  border: "border-blue-200",  dot: "bg-blue-500",  badge: "text-blue-700 bg-blue-100",  icon: "→" },
 };
 
 export default function MilestonesSection() {
@@ -29,23 +29,23 @@ export default function MilestonesSection() {
                 <div className="flex items-start justify-between gap-3 flex-wrap">
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[11px] font-bold tabular-nums text-muted">{m.year}</span>
+                      <span className="text-[11px] font-bold tabular-nums text-[--color-muted]">{m.year}</span>
                       <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${cfg.badge}`}>
                         {cfg.icon} {m.effect}
                       </span>
                     </div>
-                    <h3 className="text-sm font-semibold text-ink">{m.title}</h3>
+                    <h3 className="text-sm font-semibold text-[--color-ink]">{m.title}</h3>
                   </div>
                   {m.gdpAtTime && (
                     <div className="text-right shrink-0">
-                      <div className="text-[10px] text-muted">GDP at time</div>
-                      <div className="text-sm font-semibold text-ink">
+                      <div className="text-[10px] text-[--color-muted]">GDP at time</div>
+                      <div className="text-sm font-semibold text-[--color-ink]">
                         ${m.gdpAtTime >= 1000 ? (m.gdpAtTime / 1000).toFixed(2) + "T" : m.gdpAtTime + "B"}
                       </div>
                     </div>
                   )}
                 </div>
-                <p className="text-[12px] text-muted leading-relaxed mt-2">{m.description}</p>
+                <p className="text-[12px] text-[--color-muted] leading-relaxed mt-2">{m.description}</p>
               </div>
             </div>
           );

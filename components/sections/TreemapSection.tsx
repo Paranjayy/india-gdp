@@ -78,8 +78,8 @@ export default function TreemapSection() {
             onClick={() => setViewMode(mode)}
             className={`px-3 py-1.5 rounded-full text-[11px] font-medium border transition-all cursor-pointer ${
               viewMode === mode
-                ? "bg-[--color-ink] text-[--color-bg] border-[--color-ink]"
-                : "bg-card text-muted border-hairline hover:text-ink"
+                ? "bg-[--color-ink] text-white border-[--color-ink]"
+                : "bg-white text-[--color-muted] border-[--color-hairline] hover:text-[--color-ink]"
             }`}
           >
             {mode === "size" ? "By GDP Size" : "By Growth Rate"}
@@ -89,18 +89,18 @@ export default function TreemapSection() {
 
       {/* Hovered stat */}
       {hovered ? (
-        <div className="animate-fade-rise bg-card border border-hairline rounded-xl px-4 py-3 flex items-center gap-6">
+        <div className="animate-fade-rise bg-white border border-[--color-hairline] rounded-xl px-4 py-3 flex items-center gap-6">
           <div className="w-3 h-3 rounded-sm shrink-0" style={{ background: hovered.color }} />
           <div>
-            <div className="text-sm font-semibold text-ink">{hovered.name}</div>
-            <div className="text-[11px] text-muted">
+            <div className="text-sm font-semibold text-[--color-ink]">{hovered.name}</div>
+            <div className="text-[11px] text-[--color-muted]">
               ${hovered.gdpBillion.toFixed(0)}B · {hovered.gdpShare.toFixed(1)}% of GDP · {hovered.growthRate}% growth · {hovered.employment}% of workforce
             </div>
           </div>
         </div>
       ) : (
-        <div className="h-[52px] bg-bg rounded-xl border border-hairline flex items-center px-4">
-          <span className="text-[12px] text-muted">Hover a tile to see sector details</span>
+        <div className="h-[52px] bg-[--color-bg] rounded-xl border border-[--color-hairline] flex items-center px-4">
+          <span className="text-[12px] text-[--color-muted]">Hover a tile to see sector details</span>
         </div>
       )}
 
@@ -173,7 +173,7 @@ export default function TreemapSection() {
         {topLevel.map(s => (
           <div key={s.id} className="flex items-center gap-1.5">
             <div className="w-3 h-3 rounded-sm" style={{ background: s.color }} />
-            <span className="text-[11px] text-muted">
+            <span className="text-[11px] text-[--color-muted]">
               {s.name} — {s.gdpShare}% of GDP · {s.employment}% workforce
             </span>
           </div>

@@ -298,7 +298,7 @@ export default function WorldMap({ revealProgress }: Props) {
   const [colorDim, setColorDim] = useState<ColorDimension>("nominal");
   const [selectedCountry, setSelectedCountry] = useState<CountryGDP | null>(null);
   const [tooltip, setTooltip] = useState<TooltipState>({ visible: false, x: 0, y: 0, country: null });
-  const [position, setPosition] = useState({ coordinates: [12, 10] as [number, number], zoom: 1 });
+  const [position, setPosition] = useState({ coordinates: [78, 22] as [number, number], zoom: 1 });
   const containerRef = useRef<HTMLDivElement>(null);
 
   const mapOpacity = Math.min(1, revealProgress * 1.8);
@@ -371,9 +371,9 @@ export default function WorldMap({ revealProgress }: Props) {
       {/* ── Map ── */}
       <ComposableMap
         projection="geoNaturalEarth1"
-        projectionConfig={{ scale: 140, center: [0, 0] }}
+        projectionConfig={{ scale: 185, center: [10, 10] }}
         className="w-full h-full"
-        style={{ background: "transparent" }}
+        style={{ background: "#EEF2F7" }}
       >
         <ZoomableGroup
           zoom={position.zoom}
