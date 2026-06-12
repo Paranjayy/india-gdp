@@ -288,17 +288,19 @@ interface TooltipState {
 
 interface Props {
   revealProgress: number;
+  highlightIso3?: string;
+  defaultCenter?: [number, number];
 }
 
 // Build a quick lookup map
 const GDP_LOOKUP = new Map<string, CountryGDP>();
 WORLD_GDP.forEach(c => GDP_LOOKUP.set(c.iso3, c));
 
-export default function WorldMap({ revealProgress }: Props) {
+export default function WorldMap({ revealProgress, highlightIso3 = "IND", defaultCenter = [78, 22] }: Props) {
   const [colorDim, setColorDim] = useState<ColorDimension>("nominal");
   const [selectedCountry, setSelectedCountry] = useState<CountryGDP | null>(null);
   const [tooltip, setTooltip] = useState<TooltipState>({ visible: false, x: 0, y: 0, country: null });
-  const [position, setPosition] = useState({ coordinates: [78, 22] as [number, number], zoom: 1 });
+  const [position, setPosition] = useState({ coordinates: defaultCenter as [number, number], zoom: 1 });
   const containerRef = useRef<HTMLDivElement>(null);
 
   const mapOpacity = Math.min(1, revealProgress * 1.8);
@@ -306,15 +308,15 @@ export default function WorldMap({ revealProgress }: Props) {
 
   const getColor = useCallback((iso3: string): string => {
     const c = GDP_LOOKUP.get(iso3);
-    const isIndia = iso3 === "IND";
-    if (!c) return "#E8E8E8";
+    const isHighlighted = iso3 === highlightIso3;
+    if (!c) return "var(--color-map-neutral)";
     switch (colorDim) {
-      case "nominal":    return getGDPColor(c.nominalGDP, isIndia);
-      case "growth":     return getGrowthColor(c.growthRate, isIndia);
-      case "perCapita":  return getPerCapitaColor(c.perCapita, isIndia);
-      case "ppp":        return getGDPColor(c.pppGDP, isIndia);
+      case "nominal":    return getGDPColor(c.nominalGDP, isHighlighted);
+      case "growth":     return getGrowthColor(c.growthRate, isHighlighted);
+      case "perCapita":  return getPerCapitaColor(c.perCapita, isHighlighted);
+      case "ppp":        return getGDPColor(c.pppGDP, isHighlighted);
     }
-  }, [colorDim]);
+  }, [colorDim, highlightIso3]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     setTooltip(prev => ({ ...prev, x: e.clientX, y: e.clientY }));
@@ -373,7 +375,7 @@ export default function WorldMap({ revealProgress }: Props) {
         projection="geoNaturalEarth1"
         projectionConfig={{ scale: 185, center: [10, 10] }}
         className="w-full h-full"
-        style={{ background: "#EEF2F7" }}
+        style={{ background: "var(--color-map-bg)" }}
       >
         <ZoomableGroup
           zoom={position.zoom}
@@ -387,7 +389,7 @@ export default function WorldMap({ revealProgress }: Props) {
                 const iso3 = ISO_NUMERIC_MAP[numId] ?? "";
                 const color = getColor(iso3);
                 const isSelected = selectedCountry?.iso3 === iso3;
-                const isIndia = iso3 === "IND";
+                const isHighlighted = iso3 === highlightIso3;
 
                 return (
                   <Geography
@@ -399,15 +401,15 @@ export default function WorldMap({ revealProgress }: Props) {
                     style={{
                       default: {
                         fill: color,
-                        stroke: isSelected ? "#1D1D1F" : isIndia ? "#FF6B35" : "#FFFFFF",
-                        strokeWidth: isSelected ? 1.5 : isIndia ? 1.2 : 0.4,
+                        stroke: isSelected ? "var(--color-map-selected-stroke)" : isHighlighted ? "#FF6B35" : "var(--color-map-stroke)",
+                        strokeWidth: isSelected ? 1.5 : isHighlighted ? 1.2 : 0.4,
                         outline: "none",
                         cursor: iso3 ? "pointer" : "default",
                         transition: "fill 0.2s",
                       },
                       hover: {
-                        fill: isIndia ? "#FF6B35" : "#374151",
-                        stroke: "#1D1D1F",
+                        fill: isHighlighted ? "#FF6B35" : "#374151",
+                        stroke: "var(--color-map-selected-stroke)",
                         strokeWidth: 0.8,
                         outline: "none",
                       },
@@ -454,9 +456,9 @@ export default function WorldMap({ revealProgress }: Props) {
                   ${tooltip.country.perCapita.toLocaleString()}
                 </span>
               </div>
-              {tooltip.country.iso3 !== "IND" && (
+              {tooltip.country.iso3 !== highlightIso3 && highlightIso3 && (
                 <div className="mt-1.5 pt-1.5 border-t border-[--color-hairline] text-[10px] text-[--color-muted]">
-                  India = {((india.nominalGDP / tooltip.country.nominalGDP) * 100).toFixed(1)}% of this country&apos;s GDP
+                  {GDP_LOOKUP.get(highlightIso3)?.name || highlightIso3} = {((GDP_LOOKUP.get(highlightIso3)?.nominalGDP || 0) / tooltip.country.nominalGDP * 100).toFixed(1)}% of this country&apos;s GDP
                 </div>
               )}
             </div>
@@ -502,27 +504,50 @@ export default function WorldMap({ revealProgress }: Props) {
               ))}
             </div>
 
-            {/* India comparison */}
-            {selectedCountry.iso3 !== "IND" && (
-              <div className="border border-[--color-hairline] rounded-xl p-4">
-                <div className="text-[11px] font-medium text-[--color-muted] mb-3">🇮🇳 India vs {selectedCountry.flag}</div>
-                <div className="space-y-2">
-                  {[
-                    { label: "GDP ratio", value: `India = ${((india.nominalGDP / selectedCountry.nominalGDP) * 100).toFixed(1)}% of ${selectedCountry.name}` },
-                    { label: "Growth advantage", value: `India grows ${(india.growthRate - selectedCountry.growthRate).toFixed(1)}pp faster`, positive: india.growthRate > selectedCountry.growthRate },
-                    { label: "Per capita gap", value: `${selectedCountry.name} earns ${Math.round(selectedCountry.perCapita / india.perCapita)}× more per person` },
-                    { label: "PPP rank", value: india.pppGDP > selectedCountry.pppGDP ? `India larger by PPP (${formatGDP(india.pppGDP)} vs ${formatGDP(selectedCountry.pppGDP)})` : `${selectedCountry.name} larger by PPP` },
-                  ].map(row => (
-                    <div key={row.label} className="text-[11px]">
-                      <span className="text-[--color-muted]">{row.label}: </span>
-                      <span className={`font-medium ${row.positive === true ? "text-green-600" : row.positive === false ? "text-red-500" : "text-[--color-ink]"}`}>
-                        {row.value}
+            {/* Highlighted Country comparison */}
+            {selectedCountry.iso3 !== highlightIso3 && highlightIso3 && (() => {
+              const target = GDP_LOOKUP.get(highlightIso3);
+              if (!target) return null;
+              const ratio = ((target.nominalGDP / selectedCountry.nominalGDP) * 100).toFixed(1);
+              const growthAdv = (target.growthRate - selectedCountry.growthRate).toFixed(1);
+              const perCapitaMultiplier = Math.round(selectedCountry.perCapita / Math.max(1, target.perCapita));
+
+              return (
+                <div className="border border-[--color-hairline] rounded-xl p-4">
+                  <div className="text-[11px] font-medium text-[--color-muted] mb-3">
+                    {target.flag} {target.name} vs {selectedCountry.flag}
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-[11px]">
+                      <span className="text-[--color-muted]">GDP ratio: </span>
+                      <span className="font-medium text-[--color-ink]">
+                        {target.name} = {ratio}% of {selectedCountry.name}
                       </span>
                     </div>
-                  ))}
+                    <div className="text-[11px]">
+                      <span className="text-[--color-muted]">Growth advantage: </span>
+                      <span className={`font-medium ${parseFloat(growthAdv) > 0 ? "text-green-600" : parseFloat(growthAdv) < 0 ? "text-red-500" : "text-[--color-ink]"}`}>
+                        {target.name} grows {parseFloat(growthAdv) > 0 ? "+" : ""}{growthAdv}pp faster
+                      </span>
+                    </div>
+                    {perCapitaMultiplier > 1 && (
+                      <div className="text-[11px]">
+                        <span className="text-[--color-muted]">Per capita gap: </span>
+                        <span className="font-medium text-[--color-ink]">
+                          {selectedCountry.name} earns {perCapitaMultiplier}× more per person
+                        </span>
+                      </div>
+                    )}
+                    <div className="text-[11px]">
+                      <span className="text-[--color-muted]">PPP comparison: </span>
+                      <span className="font-medium text-[--color-ink]">
+                        {target.pppGDP > selectedCountry.pppGDP ? `${target.name} larger by PPP` : `${selectedCountry.name} larger by PPP`}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            )}
+              );
+            })()}
 
             {selectedCountry.debtGDP && (
               <div className="mt-3 text-[11px] text-[--color-muted]">
@@ -545,8 +570,14 @@ export default function WorldMap({ revealProgress }: Props) {
               <span className="text-[9px] text-[--color-muted]">Slow</span>
               <div className="w-3 h-3 rounded-sm bg-[#22C55E] ml-1" />
               <span className="text-[9px] text-[--color-muted]">Fast</span>
-              <div className="w-3 h-3 rounded-sm bg-[#FF6B35] ml-1" />
-              <span className="text-[9px] text-[--color-muted]">India</span>
+              {highlightIso3 && highlightIso3 !== "NONE" && (
+                <>
+                  <div className="w-3 h-3 rounded-sm bg-[#FF6B35] ml-1" />
+                  <span className="text-[9px] text-[--color-muted]">
+                    {highlightIso3 === "IND" ? "India" : (GDP_LOOKUP.get(highlightIso3)?.name || "Target")}
+                  </span>
+                </>
+              )}
             </>
           ) : (
             <>
@@ -555,8 +586,14 @@ export default function WorldMap({ revealProgress }: Props) {
               <div className="w-3 h-3 rounded-sm bg-[#2563EB]" />
               <div className="w-3 h-3 rounded-sm bg-[#1E40AF]" />
               <span className="text-[9px] text-[--color-muted] ml-1">Low → High</span>
-              <div className="w-3 h-3 rounded-sm bg-[#FF6B35] ml-2" />
-              <span className="text-[9px] text-[--color-muted]">India</span>
+              {highlightIso3 && highlightIso3 !== "NONE" && (
+                <>
+                  <div className="w-3 h-3 rounded-sm bg-[#FF6B35] ml-2" />
+                  <span className="text-[9px] text-[--color-muted]">
+                    {highlightIso3 === "IND" ? "India" : (GDP_LOOKUP.get(highlightIso3)?.name || "Target")}
+                  </span>
+                </>
+              )}
             </>
           )}
         </div>
