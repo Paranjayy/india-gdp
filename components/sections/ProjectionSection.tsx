@@ -78,12 +78,12 @@ export default function ProjectionSection() {
   return (
     <div className="space-y-6">
       {/* Simulator Inputs Card */}
-      <div className="bg-[--color-card] rounded-2xl border border-[--color-hairline] p-5 space-y-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+      <div className="bg-card rounded-2xl border border-hairline p-5 space-y-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-[--color-ink]">Custom GDP Growth Rates</h3>
+          <h3 className="text-sm font-semibold text-ink">Custom GDP Growth Rates</h3>
           <button
             onClick={() => setShowAdvanced(!showAdvanced)}
-            className="text-[11px] font-semibold text-[--color-india-saffron] hover:underline cursor-pointer"
+            className="text-[11px] font-semibold text-india-saffron hover:underline cursor-pointer"
           >
             {showAdvanced ? "Hide Other Countries" : "Customize Other Countries"}
           </button>
@@ -92,7 +92,7 @@ export default function ProjectionSection() {
         {/* India Slider */}
         <div className="space-y-1.5">
           <div className="flex justify-between text-xs font-semibold">
-            <span className="text-[--color-ink]">🇮🇳 India</span>
+            <span className="text-ink">🇮🇳 India</span>
             <span className="text-amber-600 dark:text-amber-500 font-mono font-bold">{indiaGrowth.toFixed(1)}%</span>
           </div>
           <input
@@ -107,10 +107,10 @@ export default function ProjectionSection() {
         </div>
 
         {showAdvanced && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-[--color-hairline] animate-popup-enter">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-hairline animate-popup-enter">
             {/* US */}
             <div className="space-y-1">
-              <div className="flex justify-between text-[11px] font-medium text-[--color-muted]">
+              <div className="flex justify-between text-[11px] font-medium text-muted">
                 <span>🇺🇸 United States</span>
                 <span className="font-mono">{usaGrowth.toFixed(1)}%</span>
               </div>
@@ -126,7 +126,7 @@ export default function ProjectionSection() {
             </div>
             {/* China */}
             <div className="space-y-1">
-              <div className="flex justify-between text-[11px] font-medium text-[--color-muted]">
+              <div className="flex justify-between text-[11px] font-medium text-muted">
                 <span>🇨🇳 China</span>
                 <span className="font-mono">{chinaGrowth.toFixed(1)}%</span>
               </div>
@@ -142,7 +142,7 @@ export default function ProjectionSection() {
             </div>
             {/* Germany */}
             <div className="space-y-1">
-              <div className="flex justify-between text-[11px] font-medium text-[--color-muted]">
+              <div className="flex justify-between text-[11px] font-medium text-muted">
                 <span>🇩🇪 Germany</span>
                 <span className="font-mono">{germanyGrowth.toFixed(1)}%</span>
               </div>
@@ -158,7 +158,7 @@ export default function ProjectionSection() {
             </div>
             {/* Japan */}
             <div className="space-y-1">
-              <div className="flex justify-between text-[11px] font-medium text-[--color-muted]">
+              <div className="flex justify-between text-[11px] font-medium text-muted">
                 <span>🇯🇵 Japan</span>
                 <span className="font-mono">{japanGrowth.toFixed(1)}%</span>
               </div>
@@ -184,20 +184,20 @@ export default function ProjectionSection() {
           { label: "Overtakes China", year: overtakeYears.overtakeChina },
           { label: "Overtakes United States", year: overtakeYears.overtakeUSA },
         ].map((item) => (
-          <div key={item.label} className="bg-[--color-card] rounded-xl border border-[--color-hairline] p-3 text-center">
-            <div className="text-[10px] text-[--color-muted] mb-1 leading-tight">{item.label}</div>
-            <div className="text-base sm:text-lg font-bold text-[--color-ink]">
+          <div key={item.label} className="bg-card rounded-xl border border-hairline p-3 text-center">
+            <div className="text-[10px] text-muted mb-1 leading-tight">{item.label}</div>
+            <div className="text-base sm:text-lg font-bold text-ink">
               {item.year ? item.year : ">2050"}
             </div>
             {item.year && (
-              <div className="text-[9px] text-[--color-muted]">in {item.year - 2026} years</div>
+              <div className="text-[9px] text-muted">in {item.year - 2026} years</div>
             )}
           </div>
         ))}
       </div>
 
       {/* Interactive Line Chart */}
-      <div className="bg-[--color-card] rounded-2xl border border-[--color-hairline] p-4 relative">
+      <div className="bg-card rounded-2xl border border-hairline p-4 relative">
         <svg viewBox={`0 0 100 ${chartH}`} className="w-full" style={{ height: chartH }} preserveAspectRatio="none">
           {/* Grid lines */}
           {[0, 25, 50, 75, 100].map(p => (
@@ -252,7 +252,7 @@ export default function ProjectionSection() {
             return (
               <div key={l.key} className="flex items-center gap-1.5 text-[10px]">
                 <div className="w-3.5 h-0.5 rounded-full" style={{ background: l.color, height: l.width }} />
-                <span className="text-[--color-muted] shrink-0">
+                <span className="text-muted shrink-0">
                   {l.flag} {l.label} ({formatGDP(finalGDP)} in 2050)
                 </span>
               </div>
@@ -261,8 +261,8 @@ export default function ProjectionSection() {
         </div>
       </div>
 
-      <div className="text-[11px] text-[--color-muted] bg-[--color-bg] rounded-xl border border-[--color-hairline] p-4 leading-relaxed">
-        <strong className="text-[--color-ink]">Simulator context:</strong> Projections use simple compounding compound interest calculation. Base figures use actual IMF Nominal GDP in USD Billions starting in 2026. Custom growth rates apply constantly year-on-year. Actual currency swings, inflation differentials, and productivity cycles will introduce volatility to these clean curves.
+      <div className="text-[11px] text-muted bg-bg rounded-xl border border-hairline p-4 leading-relaxed">
+        <strong className="text-ink">Simulator context:</strong> Projections use simple compounding compound interest calculation. Base figures use actual IMF Nominal GDP in USD Billions starting in 2026. Custom growth rates apply constantly year-on-year. Actual currency swings, inflation differentials, and productivity cycles will introduce volatility to these clean curves.
       </div>
     </div>
   );

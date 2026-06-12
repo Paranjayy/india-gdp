@@ -64,27 +64,27 @@ export default function RoadmapSection() {
         return (
           <div
             key={item.phase}
-            className="bg-[--color-card] border border-[--color-hairline] rounded-2xl overflow-hidden transition-all shadow-[0_1px_3px_rgba(0,0,0,0.02)]"
+            className="bg-card border border-hairline rounded-2xl overflow-hidden transition-all shadow-[0_1px_3px_rgba(0,0,0,0.02)]"
           >
             {/* Header / Clickable Toggle */}
             <button
               onClick={() => setExpandedIndex(isExpanded ? null : index)}
-              className="w-full flex items-center justify-between p-5 text-left cursor-pointer hover:bg-[--color-bg]/40 transition-colors"
+              className="w-full flex items-center justify-between p-5 text-left cursor-pointer hover:bg-bg/40 transition-colors"
             >
               <div className="flex items-center gap-4">
-                <span className="text-2xl w-10 h-10 rounded-xl bg-[--color-bg] flex items-center justify-center border border-[--color-hairline]">
+                <span className="text-2xl w-10 h-10 rounded-xl bg-bg flex items-center justify-center border border-hairline">
                   {item.icon}
                 </span>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-bold text-[--color-india-saffron] uppercase tracking-wider">
+                    <span className="text-[10px] font-bold text-india-saffron uppercase tracking-wider">
                       {item.phase}
                     </span>
-                    <span className="text-[10px] text-[--color-muted] font-medium border border-[--color-hairline] px-1.5 py-0.5 rounded-md">
+                    <span className="text-[10px] text-muted font-medium border border-hairline px-1.5 py-0.5 rounded-md">
                       {item.timeline}
                     </span>
                   </div>
-                  <h3 className="text-sm sm:text-base font-bold text-[--color-ink]">
+                  <h3 className="text-sm sm:text-base font-bold text-ink">
                     {item.title}
                   </h3>
                 </div>
@@ -105,7 +105,7 @@ export default function RoadmapSection() {
                   viewBox="0 0 24 24"
                   strokeWidth={2.5}
                   stroke="currentColor"
-                  className={`w-4 h-4 text-[--color-muted] transition-transform duration-300 ${
+                  className={`w-4 h-4 text-muted transition-transform duration-300 ${
                     isExpanded ? "rotate-180" : ""
                   }`}
                 >
@@ -117,21 +117,21 @@ export default function RoadmapSection() {
             {/* Accordion Content */}
             <div
               className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                isExpanded ? "max-h-72 opacity-100 border-t border-[--color-hairline] p-5" : "max-h-0 opacity-0"
+                isExpanded ? "max-h-72 opacity-100 border-t border-hairline p-5" : "max-h-0 opacity-0"
               }`}
             >
               <div className="space-y-4">
-                <p className="text-xs sm:text-sm text-[--color-muted] leading-relaxed">
+                <p className="text-xs sm:text-sm text-muted leading-relaxed">
                   {item.description}
                 </p>
                 <div className="space-y-2">
-                  <h4 className="text-[11px] font-semibold text-[--color-ink] uppercase tracking-wider">
+                  <h4 className="text-[11px] font-semibold text-ink uppercase tracking-wider">
                     Key Features Highlight
                   </h4>
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[--color-muted]">
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-muted">
                     {item.features.map((feature, fIdx) => (
                       <li key={fIdx} className="flex items-start gap-2">
-                        <span className="text-[--color-india-saffron] font-bold mt-0.5">•</span>
+                        <span className="text-india-saffron font-bold mt-0.5">•</span>
                         <span>{feature}</span>
                       </li>
                     ))}

@@ -67,8 +67,8 @@ export default function StatesSection() {
             onClick={() => setSelectedState(state.name)}
             className={`flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
               selectedState === state.name
-                ? "bg-[--color-india-saffron] text-white border-transparent shadow-sm"
-                : "bg-[--color-card] text-[--color-muted] border-[--color-hairline] hover:text-[--color-ink]"
+                ? "bg-india-saffron text-white border-transparent shadow-sm"
+                : "bg-card text-muted border-hairline hover:text-ink"
             }`}
           >
             <span>{state.flag}</span>
@@ -78,25 +78,25 @@ export default function StatesSection() {
       </div>
 
       {/* Comparison Display */}
-      <div className="bg-[--color-card] border border-[--color-hairline] rounded-2xl p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] space-y-6">
+      <div className="bg-card border border-hairline rounded-2xl p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="space-y-1">
-            <h4 className="text-sm font-semibold text-[--color-muted]">Selected Indian State</h4>
+            <h4 className="text-sm font-semibold text-muted">Selected Indian State</h4>
             <div className="flex items-center gap-2">
               <span className="text-2xl">{activeData.flag}</span>
-              <span className="text-xl font-bold text-[--color-ink]">{activeData.name}</span>
-              <span className="text-sm text-[--color-muted] font-mono">({formatGDP(activeData.gsdp)})</span>
+              <span className="text-xl font-bold text-ink">{activeData.name}</span>
+              <span className="text-sm text-muted font-mono">({formatGDP(activeData.gsdp)})</span>
             </div>
           </div>
           
-          <div className="text-2xl text-[--color-muted] hidden sm:block">⚡</div>
+          <div className="text-2xl text-muted hidden sm:block">⚡</div>
 
           <div className="space-y-1 sm:text-right">
-            <h4 className="text-sm font-semibold text-[--color-muted]">Global Equivalent Country</h4>
+            <h4 className="text-sm font-semibold text-muted">Global Equivalent Country</h4>
             <div className="flex items-center gap-2 sm:justify-end">
-              <span className="text-xl font-bold text-[--color-ink]">{activeData.equivalentCountry}</span>
+              <span className="text-xl font-bold text-ink">{activeData.equivalentCountry}</span>
               <span className="text-2xl">{activeData.equivalentCountryFlag}</span>
-              <span className="text-sm text-[--color-muted] font-mono">({formatGDP(activeData.equivalentCountryGDP)})</span>
+              <span className="text-sm text-muted font-mono">({formatGDP(activeData.equivalentCountryGDP)})</span>
             </div>
           </div>
         </div>
@@ -106,10 +106,10 @@ export default function StatesSection() {
           {/* Indian State Bar */}
           <div className="space-y-1">
             <div className="flex justify-between text-[11px] font-medium">
-              <span className="text-[--color-ink]">{activeData.name} GSDP</span>
+              <span className="text-ink">{activeData.name} GSDP</span>
               <span className="font-mono">{formatGDP(activeData.gsdp)}</span>
             </div>
-            <div className="w-full h-4 bg-[--color-bg] rounded-full overflow-hidden">
+            <div className="w-full h-4 bg-bg rounded-full overflow-hidden">
               <div 
                 className="h-full bg-gradient-to-r from-orange-400 to-orange-500 rounded-full" 
                 style={{ width: `${(activeData.gsdp / Math.max(activeData.gsdp, activeData.equivalentCountryGDP)) * 100}%` }}
@@ -120,10 +120,10 @@ export default function StatesSection() {
           {/* Equivalent Country Bar */}
           <div className="space-y-1">
             <div className="flex justify-between text-[11px] font-medium">
-              <span className="text-[--color-muted]">{activeData.equivalentCountry} GDP</span>
-              <span className="font-mono text-[--color-muted]">{formatGDP(activeData.equivalentCountryGDP)}</span>
+              <span className="text-muted">{activeData.equivalentCountry} GDP</span>
+              <span className="font-mono text-muted">{formatGDP(activeData.equivalentCountryGDP)}</span>
             </div>
-            <div className="w-full h-4 bg-[--color-bg] rounded-full overflow-hidden">
+            <div className="w-full h-4 bg-bg rounded-full overflow-hidden">
               <div 
                 className="h-full bg-blue-500/80 dark:bg-blue-600/70 rounded-full" 
                 style={{ width: `${(activeData.equivalentCountryGDP / Math.max(activeData.gsdp, activeData.equivalentCountryGDP)) * 100}%` }}
@@ -132,7 +132,7 @@ export default function StatesSection() {
           </div>
         </div>
 
-        <p className="text-xs sm:text-sm text-[--color-muted] leading-relaxed pt-2">
+        <p className="text-xs sm:text-sm text-muted leading-relaxed pt-2">
           {activeData.description}
         </p>
       </div>
