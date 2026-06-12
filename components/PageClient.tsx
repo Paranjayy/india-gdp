@@ -9,6 +9,7 @@ import FadeInOnView from "@/components/ui/FadeInOnView";
 const WorldMap = dynamic(() => import("@/components/map/WorldMap"), { ssr: false });
 const SummarySection = dynamic(() => import("@/components/sections/SummarySection"));
 const TimelineSection = dynamic(() => import("@/components/sections/TimelineSection"));
+const HistoricalChartSection = dynamic(() => import("@/components/sections/HistoricalChartSection"), { ssr: false });
 const TreemapSection = dynamic(() => import("@/components/sections/TreemapSection"));
 const ComparatorsSection = dynamic(() => import("@/components/sections/ComparatorsSection"));
 const ProjectionSection = dynamic(() => import("@/components/sections/ProjectionSection"));
@@ -65,6 +66,9 @@ export default function PageClient() {
           </p>
           <FadeInOnView>
             <TimelineSection />
+          </FadeInOnView>
+          <FadeInOnView>
+            <HistoricalChartSection />
           </FadeInOnView>
         </div>
       </section>
