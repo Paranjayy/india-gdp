@@ -9,6 +9,7 @@ export default function Header() {
   const links = [
     { href: "/", label: "India Tracker" },
     { href: "/world", label: "Global Standings" },
+    { href: "/governance", label: "Governance" },
     { href: "/methodology", label: "Methodology" },
   ];
 

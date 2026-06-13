@@ -22,6 +22,9 @@ import {
   type CountryGDP,
 } from "@/lib/gdpData";
 import SidePanel from "./SidePanel";
+import TopToolbar from "./TopToolbar";
+import VisitorsWidget from "../ui/VisitorsWidget";
+
 
 const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
@@ -363,6 +366,16 @@ export default function WorldMap({ revealProgress, selectedCountry: propSelected
     }
   }, [revealProgress, selectedCountry]);
 
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setSelectedCountry(null);
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [setSelectedCountry]);
+
   const mapOpacity = Math.min(1, revealProgress * 1.8);
   const panelOpen = !!selectedCountry;
 
@@ -414,20 +427,15 @@ export default function WorldMap({ revealProgress, selectedCountry: propSelected
       onMouseMove={handleMouseMove}
     >
       {/* ── Top toolbar ── */}
-      <div className="absolute top-16 inset-x-0 z-20 flex items-center justify-center gap-1.5 pointer-events-auto px-4">
-        {(["nominal", "ppp", "growth", "perCapita"] as ColorDimension[]).map(dim => (
-          <button
-            key={dim}
-            onClick={() => setColorDim(dim)}
-            className={`px-3 py-1.5 rounded-full text-[11px] font-medium tracking-tight border transition-all cursor-pointer ${
-              colorDim === dim
-                ? "bg-[--color-ink] text-white border-[--color-ink]"
-                : "bg-white/80 text-[--color-muted] border-[--color-hairline] hover:bg-white hover:text-[--color-ink] backdrop-blur"
-            }`}
-          >
-            {dimLabel[dim]}
-          </button>
-        ))}
+      <TopToolbar
+        colorDim={colorDim}
+        onColorDimChange={setColorDim}
+        onSearchNavigate={(c) => setSelectedCountry(c)}
+      />
+
+      {/* ── Visitors Widget ── */}
+      <div className="absolute top-6 right-6 z-30 pointer-events-auto hidden md:block">
+        <VisitorsWidget />
       </div>
 
       {/* ── Map ── */}
