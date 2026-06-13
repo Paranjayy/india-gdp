@@ -3,6 +3,12 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
+interface ResolutionStep {
+  name: string;
+  status: "completed" | "pending" | "delayed";
+  actionLabel?: string;
+}
+
 interface Issue {
   id: string;
   title: string;
@@ -27,7 +33,10 @@ interface Issue {
     comment: string;
     votes: number;
     tone: "satirical" | "serious" | "constructive";
+    timestamp: Date;
   }[];
+  steps: ResolutionStep[];
+  aiCompromise?: string;
 }
 
 const INITIAL_ISSUES: Issue[] = [
@@ -50,10 +59,17 @@ const INITIAL_ISSUES: Issue[] = [
       { party: "AMC Municipal Engineers", preference: "Prefers systematic drainage pipeline overhaul first before laying final asphalt layer.", weight: 70 }
     ],
     debateThreads: [
-      { user: "amdalover", avatar: "🦁", comment: "The pothole is so deep, I saw a local fish population starting to thrive in it. Can we get it declared a wetland?", votes: 42, tone: "satirical" },
-      { user: "civil_eng_guy", avatar: "🏗️", comment: "Resurfacing without replacing the sub-base is useless. The water will seep back in two weeks. Drainage must be completed first.", votes: 29, tone: "serious" },
-      { user: "pothole_patrol", avatar: "🛡️", comment: "Could we pool private funding to speedrun the asphalt mix purchase? AMC bureaucratic signing takes 3 weeks alone.", votes: 18, tone: "constructive" }
-    ]
+      { user: "amdalover", avatar: "🦁", comment: "The pothole is so deep, I saw a local fish population starting to thrive in it. Can we get it declared a wetland?", votes: 42, tone: "satirical", timestamp: new Date(Date.now() - 4 * 3600000) },
+      { user: "civil_eng_guy", avatar: "🏗️", comment: "Resurfacing without replacing the sub-base is useless. The water will seep back in two weeks. Drainage must be completed first.", votes: 29, tone: "serious", timestamp: new Date(Date.now() - 12 * 3600000) },
+      { user: "pothole_patrol", avatar: "🛡️", comment: "Could we pool private funding to speedrun the asphalt mix purchase? AMC bureaucratic signing takes 3 weeks alone.", votes: 18, tone: "constructive", timestamp: new Date(Date.now() - 24 * 3600000) }
+    ],
+    steps: [
+      { name: "Sewer Line Infiltration Fix", status: "completed" },
+      { name: "Sub-Base Aggregates Packing", status: "completed" },
+      { name: "Procure Rapid-Dry Asphalt Mix", status: "delayed", actionLabel: "Bypass Local Sourcing Tenders" },
+      { name: "Overnight Application & Seal", status: "pending" }
+    ],
+    aiCompromise: "Values conflict arises not from facts, but from different preference prioritization. AMC will dispatch road crews specifically between 1 AM and 5 AM. Shopkeepers will receive municipal property tax credits offset by 15% for the block-out nights. Resurfacing base layer will use rapid-cure polymer-modified concrete."
   },
   {
     id: "#102919",
@@ -74,10 +90,17 @@ const INITIAL_ISSUES: Issue[] = [
       { party: "City Planners", preference: "Negotiate affordable housing offsets, maintain strict building codes.", weight: 75 }
     ],
     debateThreads: [
-      { user: "rent_is_too_high", avatar: "🏠", comment: "A 90% rent hike was handed down yesterday to my neighbor. It's almost cheaper to commute from Tokyo at this rate.", votes: 125, tone: "serious" },
-      { user: "historic_laundromat", avatar: "🧺", comment: "We must preserve this historic parking garage, what if a ghost wants to park their horse there in the future?", votes: 88, tone: "satirical" },
-      { user: "pro_density", avatar: "🏙️", comment: "Simple solution: remove discretionary review for projects conforming to the general plan. No more 3-year hearings for 6 apartments.", votes: 64, tone: "constructive" }
-    ]
+      { user: "rent_is_too_high", avatar: "🏠", comment: "A 90% rent hike was handed down yesterday to my neighbor. It's almost cheaper to commute from Tokyo at this rate.", votes: 125, tone: "serious", timestamp: new Date(Date.now() - 2 * 3600000) },
+      { user: "historic_laundromat", avatar: "🧺", comment: "We must preserve this historic parking garage, what if a ghost wants to park their horse there in the future?", votes: 88, tone: "satirical", timestamp: new Date(Date.now() - 8 * 3600000) },
+      { user: "pro_density", avatar: "🏙️", comment: "Simple solution: remove discretionary review for projects conforming to the general plan. No more 3-year hearings for 6 apartments.", votes: 64, tone: "constructive", timestamp: new Date(Date.now() - 18 * 3600000) }
+    ],
+    steps: [
+      { name: "Draft Zoning Amendment Packets", status: "completed" },
+      { name: "Clear Discretionary Reviews Blockage", status: "delayed", actionLabel: "Implement SB-423 Fast-Track Action" },
+      { name: "Sub-Contractor Permits Approvals", status: "pending" },
+      { name: "Groundbreaking & Construction Phase", status: "pending" }
+    ],
+    aiCompromise: "Establish a Transit-Priority Overlay District within 1/2 mile of transit stations. Residential developments conforming to pre-approved structural specifications are automatically approved by AI check in 14 days, bypassing discretionary review completely."
   },
   {
     id: "#302912",
@@ -98,10 +121,17 @@ const INITIAL_ISSUES: Issue[] = [
       { party: "Fishermen Union", preference: "Protect coastal docking lanes and access routes nearby during any extra reclamation.", weight: 85 }
     ],
     debateThreads: [
-      { user: "mumbaikar_99", avatar: "🚗", comment: "Speeding down the coastal highway only to stand still for 45 minutes at the exit. The illusion of speed is beautiful.", votes: 73, tone: "satirical" },
-      { user: "transit_now", avatar: "🚇", comment: "The only real solution is public rail extension. Widening lanes just induces more traffic in a cycle.", votes: 52, tone: "serious" },
-      { user: "compromise_architect", avatar: "✏️", comment: "Elevated exit lane directly into the arterial bypass would avoid the local residential street impact completely.", votes: 31, tone: "constructive" }
-    ]
+      { user: "mumbaikar_99", avatar: "🚗", comment: "Speeding down the coastal highway only to stand still for 45 minutes at the exit. The illusion of speed is beautiful.", votes: 73, tone: "satirical", timestamp: new Date(Date.now() - 1 * 3600000) },
+      { user: "transit_now", avatar: "🚇", comment: "The only real solution is public rail extension. Widening lanes just induces more traffic in a cycle.", votes: 52, tone: "serious", timestamp: new Date(Date.now() - 5 * 3600000) },
+      { user: "compromise_architect", avatar: "✏️", comment: "Elevated exit lane directly into the arterial bypass would avoid the local residential street impact completely.", votes: 31, tone: "constructive", timestamp: new Date(Date.now() - 12 * 3600000) }
+    ],
+    steps: [
+      { name: "Coastal Reclamation Approvals", status: "completed" },
+      { name: "Bridge Piling Foundations Work", status: "completed" },
+      { name: "Negotiate Fish-Landing Bay Rights", status: "delayed", actionLabel: "Provide Modern Docking Facilities Grant" },
+      { name: "Exit Ramp Asphalt Overlay", status: "pending" }
+    ],
+    aiCompromise: "Create an elevated bypass exit lane spanning the fishermen cooperative zone. MCGM will fund a refrigeration facility modernization to compensate fishermen for slip lane footprint adjustments."
   },
   {
     id: "#592811",
@@ -122,10 +152,17 @@ const INITIAL_ISSUES: Issue[] = [
       { party: "Industrial Operators", preference: "Avoid power cuts, fuel bans, or arbitrary factory shutdowns.", weight: 80 }
     ],
     debateThreads: [
-      { user: "fresh_air_seeker", avatar: "😷", comment: "The air is so thick it counts as a solid meal. Who needs breakfast when you can inhale 200 cigarettes on the way to work?", votes: 140, tone: "satirical" },
-      { user: "agri_scientist", avatar: "🌾", comment: "Happy Seeder machines work but farmers need fuel subsidy to run them. Fining farmers who can barely afford seeds doesn't work.", votes: 85, tone: "serious" },
-      { user: "green_innovator", avatar: "💡", comment: "Convert straw into compressed bio-gas. Set up collection hubs within 20km of every farming cluster to create commercial value.", votes: 55, tone: "constructive" }
-    ]
+      { user: "fresh_air_seeker", avatar: "😷", comment: "The air is so thick it counts as a solid meal. Who needs breakfast when you can inhale 200 cigarettes on the way to work?", votes: 140, tone: "satirical", timestamp: new Date(Date.now() - 30 * 60000) },
+      { user: "agri_scientist", avatar: "🌾", comment: "Happy Seeder machines work but farmers need fuel subsidy to run them. Fining farmers who can barely afford seeds doesn't work.", votes: 85, tone: "serious", timestamp: new Date(Date.now() - 3 * 3600000) },
+      { user: "green_innovator", avatar: "💡", comment: "Convert straw into compressed bio-gas. Set up collection hubs within 20km of every farming cluster to create commercial value.", votes: 55, tone: "constructive", timestamp: new Date(Date.now() - 9 * 3600000) }
+    ],
+    steps: [
+      { name: "Deploy Regional Filter Modules", status: "completed" },
+      { name: "Establish Interstate Taskforce", status: "delayed", actionLabel: "Implement Punjab-NCR Biomass Subsidy" },
+      { name: "Stubble Collection Hub Setup", status: "pending" },
+      { name: "Enforce Winter Heavy Traffic Bans", status: "pending" }
+    ],
+    aiCompromise: "Create NCR Stubble Energy Credits where Punjab farmers are paid Rs.1500 per ton of straw delivered to compressed bio-gas hubs. Smog towers will be shut down and funds redirected to local electric feeder bus lines."
   }
 ];
 
@@ -135,9 +172,18 @@ export default function GovernanceTracker() {
   const [selectedIssue, setSelectedIssue] = useState<Issue | null>(INITIAL_ISSUES[0]);
   const [activeTab, setActiveTab] = useState<"resolver" | "debates">("resolver");
 
+  // Filter & Search Controls
+  const [sortOrder, setSortOrder] = useState<"top" | "newest" | "tone">("top");
+  const [selectedToneFilter, setSelectedToneFilter] = useState<string>("All");
+
   // New Comment Input
   const [newComment, setNewComment] = useState("");
   const [selectedTone, setSelectedTone] = useState<"satirical" | "serious" | "constructive">("constructive");
+
+  // Simulated AI compromise generation
+  const [generatingCompromise, setGeneratingCompromise] = useState(false);
+  const [compromiseSteps, setCompromiseSteps] = useState<string[]>([]);
+  const [currentStepIdx, setCurrentStepIdx] = useState(0);
 
   const categories = ["All", "Road Infrastructure", "Housing", "Environment", "Bureaucracy", "Traffic", "Public Health"];
 
@@ -168,6 +214,7 @@ export default function GovernanceTracker() {
       comment: newComment,
       votes: 1,
       tone: selectedTone,
+      timestamp: new Date()
     };
 
     const updatedThreads = [newCommentObj, ...selectedIssue.debateThreads];
@@ -175,6 +222,83 @@ export default function GovernanceTracker() {
     setSelectedIssue(updatedIssue);
     setIssues(issues.map((i) => (i.id === selectedIssue.id ? updatedIssue : i)));
     setNewComment("");
+  };
+
+  // Reddit sorting & filters
+  const sortedComments = useMemo(() => {
+    if (!selectedIssue) return [];
+    let threads = [...selectedIssue.debateThreads];
+
+    // Filter by tone
+    if (selectedToneFilter !== "All") {
+      threads = threads.filter((t) => t.tone === selectedToneFilter);
+    }
+
+    // Sort order
+    if (sortOrder === "top") {
+      threads.sort((a, b) => b.votes - a.votes);
+    } else if (sortOrder === "newest") {
+      threads.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+    } else if (sortOrder === "tone") {
+      const order = { constructive: 0, serious: 1, satirical: 2 };
+      threads.sort((a, b) => order[a.tone] - order[b.tone]);
+    }
+    return threads;
+  }, [selectedIssue, sortOrder, selectedToneFilter]);
+
+  // Resolving action items dynamically
+  const handleResolveStep = (stepIdx: number) => {
+    if (!selectedIssue) return;
+    const updatedSteps = selectedIssue.steps.map((s, idx) => {
+      if (idx === stepIdx) {
+        return { ...s, status: "completed" as const };
+      }
+      // Set the next pending step as active or delayed if applicable
+      if (idx === stepIdx + 1 && s.status === "pending") {
+        return { ...s, status: "delayed" as const, actionLabel: s.actionLabel || "Expedite Approval Pipeline" };
+      }
+      return s;
+    });
+
+    const isAllResolved = updatedSteps.every((s) => s.status === "completed");
+    const nextProgress = Math.min(100, selectedIssue.progress + 15);
+    const updatedIssue: Issue = {
+      ...selectedIssue,
+      steps: updatedSteps,
+      progress: isAllResolved ? 100 : nextProgress,
+      status: isAllResolved ? "Resolved" : selectedIssue.status,
+      bottleneck: isAllResolved ? "None. Resolved successfully." : selectedIssue.bottleneck
+    };
+
+    setSelectedIssue(updatedIssue);
+    setIssues(issues.map((i) => (i.id === selectedIssue.id ? updatedIssue : i)));
+  };
+
+  // AI Compromise Generator Simulation
+  const triggerGenerateCompromise = () => {
+    setGeneratingCompromise(true);
+    setCurrentStepIdx(0);
+    const mockSteps = [
+      "Connecting to Chatty Central governance models...",
+      "Resolving stakeholder utility maps and welfare functions...",
+      "Negotiating weights with anonymous public debate metrics...",
+      "Compiling non-bureaucratic compromise framework..."
+    ];
+    setCompromiseSteps(mockSteps);
+
+    const runTimer = (idx: number) => {
+      if (idx < mockSteps.length) {
+        setTimeout(() => {
+          setCurrentStepIdx(idx + 1);
+          runTimer(idx + 1);
+        }, 800);
+      } else {
+        setTimeout(() => {
+          setGeneratingCompromise(false);
+        }, 500);
+      }
+    };
+    runTimer(0);
   };
 
   return (
@@ -344,14 +468,57 @@ export default function GovernanceTracker() {
                     </div>
 
                     {/* Active Bottleneck tracking */}
-                    <div className="bg-red-50/50 border border-red-100 rounded-2xl p-4">
-                      <div className="flex items-center gap-1.5 text-red-800 text-[10px] font-bold uppercase tracking-wider mb-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" />
-                        Active Resolution Bottleneck
+                    {selectedIssue.status !== "Resolved" && (
+                      <div className="bg-red-50/50 border border-red-100 rounded-2xl p-4">
+                        <div className="flex items-center gap-1.5 text-red-800 text-[10px] font-bold uppercase tracking-wider mb-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" />
+                          Active Resolution Bottleneck
+                        </div>
+                        <p className="text-xs text-red-900 leading-relaxed font-medium">
+                          {selectedIssue.bottleneck}
+                        </p>
                       </div>
-                      <p className="text-xs text-red-900 leading-relaxed font-medium">
-                        {selectedIssue.bottleneck}
-                      </p>
+                    )}
+
+                    {/* Step-by-Step Interactive Checklist */}
+                    <div className="bg-white border border-[--color-hairline] rounded-2xl p-4 space-y-3">
+                      <h4 className="text-xs font-bold text-[--color-ink] uppercase tracking-wider">
+                        Speedrun Resolution Checklist
+                      </h4>
+                      <div className="flex flex-col gap-2">
+                        {selectedIssue.steps.map((step, idx) => (
+                          <div
+                            key={idx}
+                            className="flex items-center justify-between gap-4 p-2 rounded-xl bg-neutral-50 border border-black/[0.02]"
+                          >
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              <span className="text-sm">
+                                {step.status === "completed" ? "✅" : step.status === "delayed" ? "⚠️" : "⏳"}
+                              </span>
+                              <span
+                                className={`text-xs ${
+                                  step.status === "completed"
+                                    ? "line-through text-neutral-400"
+                                    : step.status === "delayed"
+                                    ? "text-red-700 font-semibold"
+                                    : "text-[--color-ink]"
+                                } truncate`}
+                              >
+                                {step.name}
+                              </span>
+                            </div>
+                            {step.status === "delayed" && step.actionLabel && (
+                              <button
+                                type="button"
+                                onClick={() => handleResolveStep(idx)}
+                                className="px-2 py-1 rounded bg-[--color-ink] text-white text-[10px] font-bold hover:opacity-95 active:scale-95 transition"
+                              >
+                                {step.actionLabel}
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
                     </div>
 
                     {/* Conflicts preferences list */}
@@ -377,13 +544,33 @@ export default function GovernanceTracker() {
                     </div>
 
                     {/* AI Dispute Resolver Summary from Chatty */}
-                    <div className="bg-amber-50/50 border border-amber-200/40 rounded-2xl p-4">
-                      <h4 className="text-xs font-bold text-amber-800 uppercase tracking-wider mb-2 flex items-center gap-1">
-                        🤖 AI Dispute Resolver Perspective (Chatty)
-                      </h4>
-                      <p className="text-xs text-amber-900/90 leading-relaxed">
-                        Values conflict arises not from facts, but from different preference prioritization. Shopkeepers prioritize short-term trade flow, commuters prioritize transit speed, and engineering teams prioritize structural durability. A compromise requires setting a strict overnight repair protocol accompanied by subsidized municipal validation grids to compensate shopkeepers.
-                      </p>
+                    <div className="bg-amber-50/50 border border-amber-200/40 rounded-2xl p-4 relative overflow-hidden">
+                      <div className="flex justify-between items-center mb-2">
+                        <h4 className="text-xs font-bold text-amber-800 uppercase tracking-wider flex items-center gap-1">
+                          🤖 AI Dispute Resolver Perspective (Chatty)
+                        </h4>
+                        {!generatingCompromise && (
+                          <button
+                            onClick={triggerGenerateCompromise}
+                            className="text-[9px] font-bold text-amber-700 hover:text-amber-900 border border-amber-300 rounded-full px-2 py-0.5 bg-white shadow-sm transition-all"
+                          >
+                            Recalculate Compromise
+                          </button>
+                        )}
+                      </div>
+
+                      {generatingCompromise ? (
+                        <div className="space-y-2 py-4 text-center">
+                          <span className="inline-block text-lg animate-spin">🌀</span>
+                          <p className="text-xs text-amber-800 font-medium animate-pulse">
+                            {compromiseSteps[currentStepIdx] || "Recalculating compromise vectors..."}
+                          </p>
+                        </div>
+                      ) : (
+                        <p className="text-xs text-amber-950 leading-relaxed italic bg-white/50 p-2.5 rounded-xl border border-amber-100">
+                          &ldquo;{selectedIssue.aiCompromise}&rdquo;
+                        </p>
+                      )}
                     </div>
                   </motion.div>
                 ) : (
@@ -430,9 +617,45 @@ export default function GovernanceTracker() {
                       </button>
                     </form>
 
+                    {/* Filter & Sorting controls */}
+                    <div className="flex justify-between items-center gap-4 text-xs text-[--color-muted] pb-2 border-b border-[--color-hairline]">
+                      <div className="flex gap-2">
+                        <span>Sort:</span>
+                        <button
+                          onClick={() => setSortOrder("top")}
+                          className={`font-semibold ${sortOrder === "top" ? "text-[--color-ink]" : "hover:text-[--color-ink]"}`}
+                        >
+                          Top
+                        </button>
+                        <button
+                          onClick={() => setSortOrder("newest")}
+                          className={`font-semibold ${sortOrder === "newest" ? "text-[--color-ink]" : "hover:text-[--color-ink]"}`}
+                        >
+                          Newest
+                        </button>
+                        <button
+                          onClick={() => setSortOrder("tone")}
+                          className={`font-semibold ${sortOrder === "tone" ? "text-[--color-ink]" : "hover:text-[--color-ink]"}`}
+                        >
+                          Tone
+                        </button>
+                      </div>
+
+                      <select
+                        value={selectedToneFilter}
+                        onChange={(e) => setSelectedToneFilter(e.target.value)}
+                        className="bg-transparent font-medium text-[--color-ink] focus:outline-none"
+                      >
+                        <option value="All">All Tones</option>
+                        <option value="constructive">Constructive</option>
+                        <option value="serious">Serious</option>
+                        <option value="satirical">Satirical</option>
+                      </select>
+                    </div>
+
                     {/* Comments list */}
                     <div className="space-y-2.5">
-                      {selectedIssue.debateThreads.map((comment, idx) => (
+                      {sortedComments.map((comment, idx) => (
                         <div key={idx} className="bg-white border border-[--color-hairline] rounded-2xl p-4 space-y-2.5">
                           <div className="flex justify-between items-center gap-2">
                             <div className="flex items-center gap-1.5">
