@@ -47,7 +47,7 @@ export default function Hero({ progress }: Props) {
 
   const zoom = clamp((progress - 0.55) / 0.45, 0, 1);
   const globeScale = 1 + zoom * 1.8;
-  const globeOpacity = clamp(1 - (zoom - 0.35) / 0.5, 0, 1);
+  const globeOpacity = clamp(1 - zoom * 2.0, 0, 1);
   const bgOpacity = 1 - zoom;
 
   const inactive = progress > 0.92;

@@ -88,8 +88,8 @@ export default function SidePanel({ country, onClose }: SidePanelProps) {
         style={{ transform, transition: dragOffset ? "none" : undefined }}
         className={`fixed z-30 bg-white border border-[--color-hairline] shadow-[0_12px_40px_rgba(0,0,0,0.08),0_2px_8px_rgba(0,0,0,0.02)] select-none pointer-events-auto transition-all ${
           size === "min"
-            ? "top-20 right-6 w-72 rounded-full h-11 px-4 flex items-center justify-between cursor-grab active:cursor-grabbing"
-            : "top-28 right-6 w-96 rounded-3xl p-5 max-h-[calc(100vh-8.5rem)] flex flex-col overflow-hidden"
+            ? "top-20 left-6 w-72 rounded-full h-11 px-4 flex items-center justify-between cursor-grab active:cursor-grabbing"
+            : "top-28 left-6 w-96 rounded-3xl p-5 max-h-[calc(100vh-8.5rem)] flex flex-col overflow-hidden"
         }`}
       >
         {/* Minimized Pill Mode */}
