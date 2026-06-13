@@ -10,6 +10,7 @@ export default function Header() {
     { href: "/", label: "India Tracker" },
     { href: "/world", label: "Global Standings" },
     { href: "/governance", label: "Governance" },
+    { href: "/sandbox", label: "Sandbox" },
     { href: "/methodology", label: "Methodology" },
   ];
 
