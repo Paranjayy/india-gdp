@@ -21,6 +21,7 @@ import {
   formatGDP,
   type CountryGDP,
 } from "@/lib/gdpData";
+import SidePanel from "./SidePanel";
 
 const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
@@ -526,97 +527,7 @@ export default function WorldMap({ revealProgress, selectedCountry: propSelected
       )}
 
       {/* ── Side panel ── */}
-      {selectedCountry && (
-        <div className="absolute right-0 top-0 bottom-0 z-20 w-80 bg-white border-l border-[--color-hairline] shadow-[−4px_0_24px_rgba(0,0,0,0.06)] overflow-y-auto animate-popup-enter">
-          {/* Mac-style traffic-light controls */}
-          <div className="group/tl flex items-center gap-1.5 px-5 pt-5 pb-1 flex-shrink-0">
-            <button
-              type="button"
-              onClick={() => setSelectedCountry(null)}
-              aria-label="Close"
-              title="Close"
-              className="relative w-3.5 h-3.5 rounded-full bg-[#FF5F57] hover:brightness-90 active:brightness-75 transition cursor-pointer"
-            >
-              <svg viewBox="0 0 12 12" className="absolute inset-0 w-full h-full opacity-0 group-hover/tl:opacity-100 transition-opacity">
-                <path d="M3 3 L9 9 M9 3 L3 9" stroke="#4D0000" strokeWidth="1.2" strokeLinecap="round" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              onClick={() => setSelectedCountry(null)}
-              aria-label="Minimize"
-              title="Minimize"
-              className="relative w-3.5 h-3.5 rounded-full bg-[#FEBC2E] hover:brightness-90 active:brightness-75 transition cursor-pointer"
-            >
-              <svg viewBox="0 0 12 12" className="absolute inset-0 w-full h-full opacity-0 group-hover/tl:opacity-100 transition-opacity">
-                <path d="M2.5 6 H9.5" stroke="#5C3200" strokeWidth="1.3" strokeLinecap="round" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              aria-label="Expand"
-              className="relative w-3.5 h-3.5 rounded-full bg-[#28C840] hover:brightness-90 active:brightness-75 transition cursor-not-allowed"
-            />
-          </div>
-          <div className="p-5 pt-2">
-
-            <div className="flex items-center gap-3 mb-5">
-              <span className="text-4xl">{selectedCountry.flag}</span>
-              <div>
-                <h3 className="text-xl font-semibold text-[--color-ink]">{selectedCountry.name}</h3>
-                <span className="text-[11px] text-[--color-muted]">{selectedCountry.region}</span>
-              </div>
-            </div>
-
-            {/* Key stats */}
-            <div className="grid grid-cols-2 gap-3 mb-5">
-              {[
-                { label: "Nominal GDP", value: formatGDP(selectedCountry.nominalGDP) },
-                { label: "PPP GDP", value: formatGDP(selectedCountry.pppGDP) },
-                { label: "Per Capita", value: `$${selectedCountry.perCapita.toLocaleString()}` },
-                { label: "Growth 2026", value: `${selectedCountry.growthRate > 0 ? "+" : ""}${selectedCountry.growthRate}%`, color: selectedCountry.growthRate >= 0 ? "#22c55e" : "#ef4444" },
-                { label: "Population", value: `${selectedCountry.population.toFixed(0)}M` },
-                { label: "Global Rank", value: `#${WORLD_GDP.sort((a, b) => b.nominalGDP - a.nominalGDP).findIndex(c => c.iso3 === selectedCountry.iso3) + 1}` },
-              ].map(stat => (
-                <div key={stat.label} className="bg-[--color-bg] rounded-lg p-3">
-                  <div className="text-[10px] text-[--color-muted] mb-1">{stat.label}</div>
-                  <div className="text-base font-semibold text-[--color-ink]" style={{ color: stat.color }}>
-                    {stat.value}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* India comparison */}
-            {selectedCountry.iso3 !== "IND" && (
-              <div className="border border-[--color-hairline] rounded-xl p-4">
-                <div className="text-[11px] font-medium text-[--color-muted] mb-3">🇮🇳 India vs {selectedCountry.flag}</div>
-                <div className="space-y-2">
-                  {[
-                    { label: "GDP ratio", value: `India = ${((india.nominalGDP / selectedCountry.nominalGDP) * 100).toFixed(1)}% of ${selectedCountry.name}` },
-                    { label: "Growth advantage", value: `India grows ${(india.growthRate - selectedCountry.growthRate).toFixed(1)}pp faster`, positive: india.growthRate > selectedCountry.growthRate },
-                    { label: "Per capita gap", value: `${selectedCountry.name} earns ${Math.round(selectedCountry.perCapita / india.perCapita)}× more per person` },
-                    { label: "PPP rank", value: india.pppGDP > selectedCountry.pppGDP ? `India larger by PPP (${formatGDP(india.pppGDP)} vs ${formatGDP(selectedCountry.pppGDP)})` : `${selectedCountry.name} larger by PPP` },
-                  ].map(row => (
-                    <div key={row.label} className="text-[11px]">
-                      <span className="text-[--color-muted]">{row.label}: </span>
-                      <span className={`font-medium ${row.positive === true ? "text-green-600" : row.positive === false ? "text-red-500" : "text-[--color-ink]"}`}>
-                        {row.value}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {selectedCountry.debtGDP && (
-              <div className="mt-3 text-[11px] text-[--color-muted]">
-                Debt/GDP: <span className="text-[--color-ink] font-medium">{selectedCountry.debtGDP}%</span>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+      <SidePanel country={selectedCountry} onClose={() => setSelectedCountry(null)} />
 
       {/* ── Legend ── */}
       <div className="absolute bottom-4 left-4 z-20 bg-white/90 backdrop-blur-sm rounded-xl border border-[--color-hairline] px-3 py-2">
