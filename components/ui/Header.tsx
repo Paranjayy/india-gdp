@@ -11,6 +11,7 @@ export default function Header() {
     { href: "/world", label: "Global Standings" },
     { href: "/governance", label: "Governance" },
     { href: "/sandbox", label: "Sandbox" },
+    { href: "/trade", label: "Trade" },
     { href: "/methodology", label: "Methodology" },
   ];
 
