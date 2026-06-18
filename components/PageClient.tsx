@@ -20,6 +20,7 @@ const RichestSection = dynamic(() => import("@/components/sections/RichestSectio
 const StatesSection = dynamic(() => import("@/components/sections/StatesSection"));
 const RoadmapSection = dynamic(() => import("@/components/sections/RoadmapSection"));
 const StockVsGDPSection = dynamic(() => import("@/components/sections/StockVsGDPSection"));
+const MoneyPrinterSection = dynamic(() => import("@/components/sections/MoneyPrinterSection"));
 
 export default function PageClient() {
   const progress = useScrollProgress();
@@ -169,14 +170,38 @@ export default function PageClient() {
         </div>
       </section>
 
-      {/* ── 07 · Wealth concentration ── */}
+      {/* ── 07 · The Money Printer ── */}
       <section
-        id="richest"
-        className="relative z-10 bg-bg border-t border-[--color-hairline] scroll-mt-20"
+        id="money-printer"
+        className="relative z-10 bg-[--color-bg] border-t border-[--color-hairline] scroll-mt-20"
       >
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
-            06 · Wealth concentration
+            07 · The money printer
+          </div>
+          <h2 className="text-3xl md:text-4xl font-semibold text-[--color-ink] tracking-tight leading-[1.1] mb-3">
+            Why prices can&rsquo;t go down{" "}
+            <span className="text-blue-600">— the Fed put</span>
+          </h2>
+          <p className="text-[15px] text-[--color-muted] leading-relaxed max-w-[42rem] mb-10">
+            The Federal Reserve balance sheet went from $0.9T to $8.8T in 13
+            years. M2 money supply doubled. Every crisis was met with more
+            printing. The correlation between Fed assets and S&P 500 is 0.94.
+          </p>
+          <FadeInOnView>
+            <MoneyPrinterSection />
+          </FadeInOnView>
+        </div>
+      </section>
+
+      {/* ── 08 · Wealth concentration ── */}
+      <section
+        id="richest"
+        className="relative z-10 bg-white border-t border-[--color-hairline] scroll-mt-20"
+      >
+        <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
+          <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
+            08 · Wealth concentration
           </div>
           <h2 className="text-3xl md:text-4xl font-semibold text-[--color-ink] tracking-tight leading-[1.1] mb-3">
             World&rsquo;s Richest vs. Nations
@@ -197,7 +222,7 @@ export default function PageClient() {
       >
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
-            08 · India state-level scale
+            09 · India state-level scale
           </div>
           <h2 className="text-3xl md:text-4xl font-semibold text-[--color-ink] tracking-tight leading-[1.1] mb-3">
             Indian States vs. Global Countries
@@ -218,7 +243,7 @@ export default function PageClient() {
       >
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
-            09 · What comes next
+            10 · What comes next
           </div>
           <h2 className="text-3xl md:text-4xl font-semibold text-[--color-ink] tracking-tight leading-[1.1] mb-3">
             India&rsquo;s trajectory{" "}
@@ -242,7 +267,7 @@ export default function PageClient() {
       >
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
-            10 · Project roadmap
+            11 · Project roadmap
           </div>
           <h2 className="text-3xl md:text-4xl font-semibold text-[--color-ink] tracking-tight leading-[1.1] mb-3">
             Future Modules & Plans
