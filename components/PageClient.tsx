@@ -21,6 +21,7 @@ const StatesSection = dynamic(() => import("@/components/sections/StatesSection"
 const RoadmapSection = dynamic(() => import("@/components/sections/RoadmapSection"));
 const StockVsGDPSection = dynamic(() => import("@/components/sections/StockVsGDPSection"));
 const MoneyPrinterSection = dynamic(() => import("@/components/sections/MoneyPrinterSection"));
+const SensexJourneySection = dynamic(() => import("@/components/sections/SensexJourneySection"));
 
 export default function PageClient() {
   const progress = useScrollProgress();
@@ -194,14 +195,38 @@ export default function PageClient() {
         </div>
       </section>
 
-      {/* ── 08 · Wealth concentration ── */}
+      {/* ── 08 · Sensex Journey ── */}
       <section
-        id="richest"
+        id="sensex"
         className="relative z-10 bg-white border-t border-[--color-hairline] scroll-mt-20"
       >
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
-            08 · Wealth concentration
+            08 · Sensex journey
+          </div>
+          <h2 className="text-3xl md:text-4xl font-semibold text-[--color-ink] tracking-tight leading-[1.1] mb-3">
+            From 100 to 86,000{" "}
+            <span className="text-orange-500">— India&rsquo;s stock story</span>
+          </h2>
+          <p className="text-[15px] text-[--color-muted] leading-relaxed max-w-[42rem] mb-10">
+            47 years. 860x returns. From a closed economy with 3 million
+            investors to 150 million demat accounts. The full journey of
+            BSE Sensex from base value to today.
+          </p>
+          <FadeInOnView>
+            <SensexJourneySection />
+          </FadeInOnView>
+        </div>
+      </section>
+
+      {/* ── 09 · Wealth concentration ── */}
+      <section
+        id="richest"
+        className="relative z-10 bg-[--color-bg] border-t border-[--color-hairline] scroll-mt-20"
+      >
+        <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
+          <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
+            09 · Wealth concentration
           </div>
           <h2 className="text-3xl md:text-4xl font-semibold text-[--color-ink] tracking-tight leading-[1.1] mb-3">
             World&rsquo;s Richest vs. Nations
@@ -222,7 +247,7 @@ export default function PageClient() {
       >
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
-            09 · India state-level scale
+            10 · India state-level scale
           </div>
           <h2 className="text-3xl md:text-4xl font-semibold text-[--color-ink] tracking-tight leading-[1.1] mb-3">
             Indian States vs. Global Countries
@@ -243,7 +268,7 @@ export default function PageClient() {
       >
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
-            10 · What comes next
+            11 · What comes next
           </div>
           <h2 className="text-3xl md:text-4xl font-semibold text-[--color-ink] tracking-tight leading-[1.1] mb-3">
             India&rsquo;s trajectory{" "}
@@ -267,7 +292,7 @@ export default function PageClient() {
       >
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
-            11 · Project roadmap
+            12 · Project roadmap
           </div>
           <h2 className="text-3xl md:text-4xl font-semibold text-[--color-ink] tracking-tight leading-[1.1] mb-3">
             Future Modules & Plans
