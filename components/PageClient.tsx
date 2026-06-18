@@ -23,6 +23,7 @@ const StockVsGDPSection = dynamic(() => import("@/components/sections/StockVsGDP
 const MoneyPrinterSection = dynamic(() => import("@/components/sections/MoneyPrinterSection"));
 const SensexJourneySection = dynamic(() => import("@/components/sections/SensexJourneySection"));
 const PurchasingPowerSection = dynamic(() => import("@/components/sections/PurchasingPowerSection"));
+const BubbleMachineSection = dynamic(() => import("@/components/sections/BubbleMachineSection"));
 
 export default function PageClient() {
   const progress = useScrollProgress();
@@ -244,14 +245,37 @@ export default function PageClient() {
         </div>
       </section>
 
-      {/* ── 10 · Wealth concentration ── */}
+      {/* ── 10 · The Bubble Machine ── */}
+      <section
+        id="bubbles"
+        className="relative z-10 bg-[--color-bg] border-t border-[--color-hairline] scroll-mt-20"
+      >
+        <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
+          <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
+            10 · The Bubble Machine
+          </div>
+          <h2 className="text-3xl md:text-4xl font-semibold text-[--color-ink] tracking-tight leading-[1.1] mb-3">
+            Every bubble in history{" "}
+            <span className="text-red-500">— at increasing scale</span>
+          </h2>
+          <p className="text-[15px] text-[--color-muted] leading-relaxed max-w-[42rem] mb-10">
+            Theranos → dot-com → housing → crypto → AI. Each cycle, the bubbles get bigger
+            and the bailouts get bigger. The technology survives. The valuations don&apos;t.
+          </p>
+          <FadeInOnView>
+            <BubbleMachineSection />
+          </FadeInOnView>
+        </div>
+      </section>
+
+      {/* ── 11 · Wealth concentration ── */}
       <section
         id="richest"
         className="relative z-10 bg-[--color-bg] border-t border-[--color-hairline] scroll-mt-20"
       >
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
-            10 · Wealth concentration
+            11 · Wealth concentration
           </div>
           <h2 className="text-3xl md:text-4xl font-semibold text-[--color-ink] tracking-tight leading-[1.1] mb-3">
             World&rsquo;s Richest vs. Nations
@@ -272,7 +296,7 @@ export default function PageClient() {
       >
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
-            11 · India state-level scale
+            12 · India state-level scale
           </div>
           <h2 className="text-3xl md:text-4xl font-semibold text-[--color-ink] tracking-tight leading-[1.1] mb-3">
             Indian States vs. Global Countries
@@ -293,7 +317,7 @@ export default function PageClient() {
       >
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
-            12 · What comes next
+            13 · What comes next
           </div>
           <h2 className="text-3xl md:text-4xl font-semibold text-[--color-ink] tracking-tight leading-[1.1] mb-3">
             India&rsquo;s trajectory{" "}
@@ -317,7 +341,7 @@ export default function PageClient() {
       >
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
-            13 · Project roadmap
+            14 · Project roadmap
           </div>
           <h2 className="text-3xl md:text-4xl font-semibold text-[--color-ink] tracking-tight leading-[1.1] mb-3">
             Future Modules & Plans
