@@ -19,6 +19,7 @@ const MilestonesSection = dynamic(() => import("@/components/sections/Milestones
 const RichestSection = dynamic(() => import("@/components/sections/RichestSection"));
 const StatesSection = dynamic(() => import("@/components/sections/StatesSection"));
 const RoadmapSection = dynamic(() => import("@/components/sections/RoadmapSection"));
+const StockVsGDPSection = dynamic(() => import("@/components/sections/StockVsGDPSection"));
 
 export default function PageClient() {
   const progress = useScrollProgress();
@@ -144,10 +145,34 @@ export default function PageClient() {
         </div>
       </section>
 
-      {/* ── 06 · Wealth concentration ── */}
+      {/* ── 06 · Stock Market vs GDP — The Divergence ── */}
+      <section
+        id="divergence"
+        className="relative z-10 bg-white border-t border-[--color-hairline] scroll-mt-20"
+      >
+        <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
+          <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
+            06 · The divergence
+          </div>
+          <h2 className="text-3xl md:text-4xl font-semibold text-[--color-ink] tracking-tight leading-[1.1] mb-3">
+            Stock Market vs GDP{" "}
+            <span className="text-blue-600">— prices can&rsquo;t go down</span>
+          </h2>
+          <p className="text-[15px] text-[--color-muted] leading-relaxed max-w-[42rem] mb-10">
+            Since 1980, world GDP grew 3.3x. The S&P 500 grew 220x.
+            The gap is increasingly filled by monetary expansion, financial
+            engineering, leverage, and speculation. Interactive comparison.
+          </p>
+          <FadeInOnView>
+            <StockVsGDPSection />
+          </FadeInOnView>
+        </div>
+      </section>
+
+      {/* ── 07 · Wealth concentration ── */}
       <section
         id="richest"
-        className="relative z-10 bg-white border-t border-[--color-hairline] scroll-mt-20"
+        className="relative z-10 bg-bg border-t border-[--color-hairline] scroll-mt-20"
       >
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
@@ -172,7 +197,7 @@ export default function PageClient() {
       >
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
-            07 · India state-level scale
+            08 · India state-level scale
           </div>
           <h2 className="text-3xl md:text-4xl font-semibold text-[--color-ink] tracking-tight leading-[1.1] mb-3">
             Indian States vs. Global Countries
@@ -193,7 +218,7 @@ export default function PageClient() {
       >
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
-            08 · What comes next
+            09 · What comes next
           </div>
           <h2 className="text-3xl md:text-4xl font-semibold text-[--color-ink] tracking-tight leading-[1.1] mb-3">
             India&rsquo;s trajectory{" "}
@@ -217,7 +242,7 @@ export default function PageClient() {
       >
         <div className="max-w-5xl mx-auto px-6 pt-20 pb-24">
           <div className="text-[13px] font-medium text-[--color-muted] tracking-tight mb-2">
-            09 · Project roadmap
+            10 · Project roadmap
           </div>
           <h2 className="text-3xl md:text-4xl font-semibold text-[--color-ink] tracking-tight leading-[1.1] mb-3">
             Future Modules & Plans
